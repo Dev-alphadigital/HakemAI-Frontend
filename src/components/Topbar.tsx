@@ -109,6 +109,7 @@ export default function Topbar({ setMobileOpen }: TopbarProps) {
                                 width={44}
                                 height={44}
                                 className="rounded-full cursor-pointer"
+                                onClick={() => (router.push("/dashboard/settings"))}
                             />
                             <div className="flex flex-col leading-tight">
                                 <span className="text-gray-800 font-medium text-sm">James</span>
