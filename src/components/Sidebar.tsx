@@ -6,6 +6,7 @@ import {
     FaSyncAlt,
     FaPowerOff,
     FaTimes,
+    FaCreditCard
 } from "react-icons/fa";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -104,6 +105,16 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: SidebarProps) {
                                 setMobileOpen(false);
                             }}
                         />
+                        <SidebarItem
+                            icon={<FaCreditCard />}
+                            label="Plans & Pricing"
+                            active={pathname === "/plans-pricing"}
+                            mobile
+                            onClick={() => {
+                                router.push("/plans-pricing");
+                                setMobileOpen(false);
+                            }}
+                        />
                     </nav>
                 </div>
 
@@ -150,6 +161,12 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: SidebarProps) {
                             active={pathname === "/dashboard/regenerate"}
                             onClick={() => router.push("/dashboard/regenerate")}
                         />
+                        <SidebarItem
+                            icon={<FaCreditCard />}
+                            label="Plans & Pricing"
+                            active={pathname === "/plans-pricing"}
+                            onClick={() => router.push("/plans-pricing")}
+                        />
                     </nav>
                 </div>
 
@@ -158,7 +175,7 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: SidebarProps) {
                     <SidebarItem
                         icon={<FaPowerOff />}
                         label="Logout"
-                        onClick={() => setIsLogoutOpen(true)} // 👈 open modal
+                        onClick={() => setIsLogoutOpen(true)} // open modal
                     />
                 </div>
             </aside>

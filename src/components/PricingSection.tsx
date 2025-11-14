@@ -9,24 +9,74 @@ import "swiper/css/pagination";
 export default function PricingSection() {
     const [billingCycle, setBillingCycle] = useState("annual");
 
+    // ⭐ Figma data — 100% accurate content
     const plans = [
         {
-            title: "Free",
-            price: "$0",
-            desc: "Per user/month, billed annually",
-            btn: "Get started for free",
+            title: "Starter",
+            price: "SAR 599/month",
+            pricePrefix: "",
+            description:
+                "For individuals or companies exploring AI-powered comparisons",
+            borderColor: "border-[#F5C94F]",
+
+            features: [
+                "1 user",
+                "<b>Up to 50 comparisons/month</b>",
+                "Compare up to <b>3 quotes/case</b>",
+                "AI-generated ranking with coverage, premium, and value score",
+                "Summary report",
+                "Manual onboarding & email support",
+            ],
+
+            footer: {
+                payment: "Bank transfer only (monthly or quarterly)",
+                onboarding: "Manual account setup within 24 hours",
+            },
         },
         {
-            title: "Pro",
-            price: "$85",
-            desc: "Per user/month, billed annually",
-            btn: "Get started for pro",
+            title: "Professional",
+            price: "SAR 999/month",
+            pricePrefix: "",
+            description:
+                "For small brokers handling multiple clients",
+            borderColor: "border-[#0B8A62]",
+
+            features: [
+                "Up to <b>250 comparisons/month</b>",
+                "Enhanced analytics — highlights premium gaps, benefit value, and exclusions",
+                "Team dashboard (up to 3 users)",
+                "Custom report branding with your company logo",
+                "Priority onboarding and support",
+            ],
+
+            footer: {
+                payment: "Bank transfer or invoice (monthly/annual)",
+                onboarding:
+                    "Guided setup session with dedicated agent",
+            },
         },
         {
-            title: "Enterprise",
-            price: "$150",
-            desc: "Per user/month, billed annually",
-            btn: "Get started for enterprise",
+            title: "Premium",
+            pricePrefix: "From",
+            price: "SAR 1,875/month",
+            description:
+                "For comparison platforms, insurers, and enterprise partners",
+            borderColor: "border-[#F5C94F]",
+
+            features: [
+                "<b>Unlimited comparisons</b> (fair-use policy)",
+                "Compare up to <b>8 quotes/case</b>",
+                "Advanced analytics dashboard",
+                "Dedicated account manager",
+                "SLA-backed service with performance reporting",
+                "Custom model tuning (optional upgrade)",
+            ],
+
+            footer: {
+                payment: "Annual or semi-annual invoicing",
+                onboarding:
+                    "Tailored deployment & system configuration",
+            },
         },
     ];
 
@@ -40,63 +90,52 @@ export default function PricingSection() {
                 </p>
             </div>
 
-            {/* Toggle Buttons */}
-            <div className="flex justify-center mb-12">
-                <div className="inline-flex bg-[#e6f0ee] rounded-md overflow-hidden">
-                    <button
-                        onClick={() => setBillingCycle("monthly")}
-                        className={`px-10 py-2 font-semibold transition ${billingCycle === "monthly"
-                            ? "bg-[#04786b] text-white"
-                            : "text-gray-700 hover:bg-[#d1e7e2]"
-                            }`}
-                    >
-                        Monthly
-                    </button>
-                    <button
-                        onClick={() => setBillingCycle("annual")}
-                        className={`px-2 py-2 font-semibold flex items-center gap-2 transition ${billingCycle === "annual"
-                            ? "bg-[#04786b] text-white"
-                            : "text-gray-700 hover:bg-[#d1e7e2]"
-                            }`}
-                    >
-                        Annual
-                        <span className="text-xs bg-[#fdc431] text-black px-2 py-[2px] rounded-sm font-bold">
-                            Save 35%
-                        </span>
-                    </button>
-                </div>
-            </div>
-
             {/* DESKTOP GRID */}
-            <div className="hidden md:grid max-w-6xl mx-auto grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="hidden md:grid max-w-6xl mx-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {plans.map((plan, index) => (
                     <div
                         key={index}
-                        className="border border-[#04786b]/40 rounded-lg shadow-sm p-8 text-center hover:shadow-md transition"
+                        className={`rounded-xl border-1 ${plan.borderColor} bg-white p-8 shadow-sm`}
                     >
-                        <h3 className="text-xl font-semibold mb-4">{plan.title}</h3>
-                        <p className="text-4xl font-bold mb-2">{plan.price}</p>
-                        <p className="text-gray-600 mb-6">{plan.desc}</p>
+                        {/* Title */}
+                        <h3 className="text-xl font-semibold mb-2">{plan.title}</h3>
 
-                        <h4 className="font-semibold mb-4">For your projects</h4>
-                        <ul className="space-y-2 text-gray-600 mb-8 text-sm">
-                            {Array(6)
-                                .fill("For your projects")
-                                .map((item, i) => (
-                                    <li
-                                        key={i}
-                                        className="flex items-center justify-center gap-2"
-                                    >
-                                        <span className="w-4 h-4 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs">
-                                            ✓
-                                        </span>
-                                        {item}
-                                    </li>
-                                ))}
+                        {/* Price */}
+                        <p
+                            className="text-3xl font-bold mb-1"
+                            dangerouslySetInnerHTML={{
+                                __html: `${plan.pricePrefix ? plan.pricePrefix + " " : ""}${plan.price}`,
+                            }}
+                        />
+                        <p className="text-sm text-gray-600 mb-6">{plan.description}</p>
+
+                        {/* Features */}
+                        <ul className="space-y-3 mb-8">
+                            {plan.features.map((feat, i) => (
+                                <li key={i} className="flex items-start gap-3 text-[15px]">
+                                    <span className="text-[#0B8A62] text-lg mt-[2px]">✓</span>
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: feat,
+                                        }}
+                                    ></span>
+                                </li>
+                            ))}
                         </ul>
 
-                        <button className="border border-[#fdc431] cursor-pointer text-gray-800 font-semibold px-6 py-2 rounded-md hover:bg-[#fff9e1] transition">
-                            {plan.btn}
+                        {/* Footer info */}
+                        <div className="text-sm text-gray-700 mb-6 space-y-2">
+                            <p>
+                                <b>Payment:</b> {plan.footer.payment}
+                            </p>
+                            <p>
+                                <b>Onboarding:</b> {plan.footer.onboarding}
+                            </p>
+                        </div>
+
+                        {/* Button */}
+                        <button className=" w-full cursor-pointer border border-[#04786b] text-[#04786b] font-semibold py-2 rounded-md hover:bg-[#e8f5f2] transition">
+                            Get started
                         </button>
                     </div>
                 ))}
@@ -106,49 +145,56 @@ export default function PricingSection() {
             <div className="block md:hidden max-w-sm mx-auto">
                 <Swiper
                     modules={[Pagination]}
-                    pagination={{
-                        clickable: true,
-                        el: ".custom-pagination", // attach to custom element
-                    }}
+                    pagination={{ clickable: true, el: ".custom-pagination" }}
                     spaceBetween={20}
                     slidesPerView={1}
-                    className="relative"
                 >
                     {plans.map((plan, index) => (
                         <SwiperSlide key={index}>
-                            <div className="border border-[#04786b]/40 rounded-lg shadow-sm p-8 text-center">
-                                <h3 className="text-xl font-semibold mb-4">{plan.title}</h3>
-                                <p className="text-4xl font-bold mb-2">{plan.price}</p>
-                                <p className="text-gray-600 mb-6">{plan.desc}</p>
+                            <div
+                                className={`rounded-xl border-1 ${plan.borderColor} bg-white p-8 shadow-sm`}
+                            >
+                                <h3 className="text-xl font-semibold mb-2">{plan.title}</h3>
 
-                                <h4 className="font-semibold mb-4">For your projects</h4>
-                                <ul className="space-y-2 text-gray-600 mb-8 text-sm">
-                                    {Array(5)
-                                        .fill("For your projects")
-                                        .map((item, i) => (
-                                            <li
-                                                key={i}
-                                                className="flex items-center justify-center gap-2"
-                                            >
-                                                <span className="w-4 h-4 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs">
-                                                    ✓
-                                                </span>
-                                                {item}
-                                            </li>
-                                        ))}
+                                <p
+                                    className="text-3xl font-bold mb-1"
+                                    dangerouslySetInnerHTML={{
+                                        __html: `${plan.pricePrefix ? plan.pricePrefix + " " : ""}${plan.price}`,
+                                    }}
+                                />
+                                <p className="text-sm text-gray-600 mb-6">{plan.description}</p>
+
+                                <ul className="space-y-3 mb-8">
+                                    {plan.features.map((feat, i) => (
+                                        <li key={i} className="flex items-start gap-3 text-[15px]">
+                                            <span className="text-[#0B8A62] text-lg mt-[2px]">✓</span>
+                                            <span
+                                                dangerouslySetInnerHTML={{
+                                                    __html: feat,
+                                                }}
+                                            ></span>
+                                        </li>
+                                    ))}
                                 </ul>
 
-                                <button className="border border-[#fdc431] text-gray-800 font-semibold px-6 py-2 rounded-md hover:bg-[#fff9e1] transition">
-                                    {plan.btn}
+                                <div className="text-sm text-gray-700 mb-6 space-y-2">
+                                    <p>
+                                        <b>Payment:</b> {plan.footer.payment}
+                                    </p>
+                                    <p>
+                                        <b>Onboarding:</b> {plan.footer.onboarding}
+                                    </p>
+                                </div>
+
+                                <button className="w-full border border-[#04786b] text-[#04786b] font-semibold py-2 rounded-md hover:bg-[#e8f5f2] transition">
+                                    Get started
                                 </button>
                             </div>
                         </SwiperSlide>
                     ))}
                 </Swiper>
 
-                {/* Custom Pagination Container */}
                 <div className="custom-pagination flex justify-center mt-6 pb-2"></div>
-
             </div>
         </section>
     );
