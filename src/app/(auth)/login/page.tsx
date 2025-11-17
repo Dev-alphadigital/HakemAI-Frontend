@@ -3,31 +3,65 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
+    const router = useRouter();
+
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
 
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Signup Data:", formData);
+        setError("");
+        setLoading(true);
+
+        try {
+            const res = await fetch("http://localhost:5000/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                setLoading(false);
+                setError(data?.message || "Invalid login credentials");
+                return;
+            }
+
+            // Save tokens + user
+            localStorage.setItem("accessToken", data.accessToken);
+            localStorage.setItem("refreshToken", data.refreshToken);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            // Redirect to dashboard
+            router.push("/dashboard");
+
+        } catch (err) {
+            setError("Something went wrong. Try again.");
+        }
+
+        setLoading(false);
     };
 
     return (
         <main className="min-h-screen flex flex-col lg:flex-row bg-[#fdfcf8]">
             {/* ===== LEFT SIDE ===== */}
             <div className="hidden lg:flex w-7/15 items-center justify-center relative">
-                {/* Divider */}
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 h-[75%] w-[1px] bg-gray-300"></div>
 
-                {/* Logo Section */}
                 <div className="flex flex-col items-center space-y-4">
                     <Image
                         src="/logo/logo.svg"
@@ -41,13 +75,12 @@ export default function SignupPage() {
                         HAKEM.AI
                     </h1>
                 </div>
-
             </div>
 
             {/* ===== RIGHT SIDE ===== */}
             <div className="flex flex-1 flex-col justify-center items-center px-8 md:px-16 py-10 lg:py-0">
                 <div className="w-full max-w-lg space-y-8">
-                    {/* Mobile avatar */}
+
                     <div className="flex justify-center lg:hidden mb-4">
                         <div className="w-24 h-24 flex items-center justify-center">
                             <Image
@@ -65,8 +98,12 @@ export default function SignupPage() {
                         Welcome Back!
                     </h2>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* ❌ Error message */}
+                    {error && (
+                        <p className="text-red-500 text-center font-medium">{error}</p>
+                    )}
 
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Email */}
                         <div className="p-[1px] rounded-lg bg-gradient-to-r from-[#fdc431] via-[#d7b84c] to-[#04786b]">
                             <div className="rounded-md bg-gradient-to-r from-[#f7ecc0] to-[#c1dbd3]">
@@ -96,7 +133,7 @@ export default function SignupPage() {
                                 />
                                 <button
                                     type="button"
-                                    onClick={() => setShowPassword(!showPassword)} // 👈 toggles icon + type
+                                    onClick={() => setShowPassword(!showPassword)}
                                     className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 cursor-pointer"
                                 >
                                     {showPassword ? (
@@ -108,13 +145,13 @@ export default function SignupPage() {
                             </div>
                         </div>
 
-
                         {/* Submit Button */}
                         <button
                             type="submit"
+                            disabled={loading}
                             className="w-full bg-gradient-to-r from-[#fdc431] to-[#04786b] text-white font-semibold py-3 rounded-md shadow-[0_8px_20px_rgba(0,0,0,0.25)] hover:opacity-95 transition cursor-pointer"
                         >
-                            Sign Up
+                            {loading ? "Logging in..." : "Login"}
                         </button>
                     </form>
 
