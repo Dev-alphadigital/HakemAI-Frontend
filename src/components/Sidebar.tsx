@@ -36,7 +36,6 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: SidebarProps) {
             <LogoutModal
                 isOpen={isLogoutOpen}
                 onClose={() => setIsLogoutOpen(false)}
-                onConfirm={handleLogout}
             />
 
             {/* ===== MOBILE SIDEBAR ===== */}
@@ -96,16 +95,6 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: SidebarProps) {
                             }}
                         />
                         <SidebarItem
-                            icon={<FaSyncAlt />}
-                            label="Regenerate comparison"
-                            active={pathname === "/dashboard/regenerate"}
-                            mobile
-                            onClick={() => {
-                                router.push("/dashboard/regenerate");
-                                setMobileOpen(false);
-                            }}
-                        />
-                        <SidebarItem
                             icon={<FaCreditCard />}
                             label="Plans & Pricing"
                             active={pathname === "/plans-pricing"}
@@ -154,12 +143,6 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: SidebarProps) {
                             label="My documents"
                             active={pathname === "/dashboard/my-documents"}
                             onClick={() => router.push("/dashboard/my-documents")}
-                        />
-                        <SidebarItem
-                            icon={<FaSyncAlt />}
-                            label="Regenerate comparison"
-                            active={pathname === "/dashboard/regenerate"}
-                            onClick={() => router.push("/dashboard/regenerate")}
                         />
                         <SidebarItem
                             icon={<FaCreditCard />}
