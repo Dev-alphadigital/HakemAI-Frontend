@@ -53,10 +53,11 @@ export default function Home() {
             artificial intelligence to analyze quotes from leading insurance
             companies and helps you find the best plan in seconds.
           </p>
-
-          <button className="bg-[#fdc431] cursor-pointer lg:mb-5 text-black font-semibold px-6 py-3 rounded-md shadow-md hover:bg-yellow-300 transition">
-            Get Your Comparison Now
-          </button>
+          <Link href="/dashboard">
+            <button className="bg-[#fdc431] cursor-pointer lg:mb-5 text-black font-semibold px-6 py-3 rounded-md shadow-md hover:bg-yellow-300 transition">
+              Get Your Comparison Now
+            </button>
+          </Link>
         </div>
 
         {/* RIGHT SIDE IMAGE */}

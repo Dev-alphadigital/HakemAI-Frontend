@@ -17,6 +17,7 @@ export default function SignupPage() {
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,7 +29,7 @@ export default function SignupPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("http://localhost:5000/api/auth/login", {
+            const res = await fetch(`${API_BASE}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
@@ -47,10 +48,18 @@ export default function SignupPage() {
             localStorage.setItem("refreshToken", data.refreshToken);
             localStorage.setItem("user", JSON.stringify(data.user));
 
+            document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/; max-age=604800`;
+            document.cookie = `accessToken=${data.accessToken}; path=/; max-age=604800`;
+
+
             await refreshUser();
 
-            // Redirect to dashboard
-            router.push("/dashboard");
+            // Check if the user is paid or unpaid and redirect accordingly
+            if (data.user.accountStatus === "pending") {
+                router.push("/plans-pricing");
+            } else {
+                router.push("/dashboard");
+            }
 
         } catch (err) {
             setError("Something went wrong. Try again.");

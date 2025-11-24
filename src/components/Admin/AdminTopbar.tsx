@@ -1,14 +1,39 @@
 "use client";
 
 import Image from "next/image";
-import { FaBell } from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
+import { FaBell, FaSignOutAlt } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
+import { useAdminAuth } from "@/context/AdminAuthContext";
+import { useRouter } from "next/navigation";
 
 export default function AdminTopbar() {
+    const { admin, logout } = useAdminAuth();
+    const router = useRouter();
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+        if (dropdownOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [dropdownOpen]);
+
+    const handleLogout = () => {
+        logout();
+        router.push("/admin/login");
+    };
+
     return (
         <header className="w-full bg-[#e8f1ed] flex items-center justify-between px-4 md:px-10 py-3 border-b border-gray-200 relative">
             {/* Left: Logo */}
-            <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="flex items-center gap-3 flex-shrink-0 cursor-pointer" onClick={() => router.push("/admin/dashboard")}>
                 <div className="relative w-12 h-12">
                     <Image
                         src="/logo/logo.svg"
@@ -29,22 +54,38 @@ export default function AdminTopbar() {
             </div>
 
             {/* Right: Notification + Profile */}
-            <div className="flex items-center gap-5 flex-shrink-0">
-                <div className="flex items-center gap-2 bg-white rounded-full px-3 py-1 shadow-sm hover:shadow-md transition cursor-pointer">
-                    <div className="w-8 h-8 rounded-full overflow-hidden">
-                        <Image
-                            src="/images/profile.png"
-                            alt="Admin Avatar"
-                            width={32}
-                            height={32}
-                            className="object-cover"
-                        />
+            <div className="flex items-center gap-5 flex-shrink-0" ref={dropdownRef}>
+                <div 
+                    className="flex items-center gap-2 bg-white rounded-full px-3 py-1 shadow-sm hover:shadow-md transition cursor-pointer relative"
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                    <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-r from-teal-600 to-yellow-500 flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">
+                            {admin?.username?.charAt(0).toUpperCase() || "A"}
+                        </span>
                     </div>
                     <div className="hidden sm:flex flex-col leading-tight">
-                        <span className="text-sm font-semibold text-gray-900">James</span>
-                        <span className="text-xs text-gray-500">Admin</span>
+                        <span className="text-sm font-semibold text-gray-900">{admin?.username || "Admin"}</span>
+                        <span className="text-xs text-gray-500">{admin?.role || "Admin"}</span>
                     </div>
                     <FaChevronDown className="text-gray-500 text-xs" />
+
+                    {/* Dropdown Menu */}
+                    {dropdownOpen && (
+                        <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                            <div className="p-3 border-b border-gray-100">
+                                <p className="text-sm font-semibold text-gray-900">{admin?.username}</p>
+                                <p className="text-xs text-gray-500">{admin?.email}</p>
+                            </div>
+                            <button
+                                onClick={handleLogout}
+                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                            >
+                                <FaSignOutAlt className="text-xs" />
+                                <span>Logout</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </header>

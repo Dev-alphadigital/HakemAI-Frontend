@@ -10,6 +10,7 @@ import DeleteAccountModal from "@/components/DeleteAccountModal";
 export default function SettingsPage() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     // Profile data from backend
     const [profile, setProfile] = useState({
@@ -34,7 +35,7 @@ export default function SettingsPage() {
                 const token = localStorage.getItem("accessToken");
                 if (!token) return;
 
-                const res = await fetch("http://localhost:5000/api/auth/profile", {
+                const res = await fetch(`${API_BASE}/api/auth/profile`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
@@ -60,7 +61,7 @@ export default function SettingsPage() {
             if (!token) return alert("Session expired");
 
             // 1. Update profile
-            await fetch("http://localhost:5000/api/users/update-profile", {
+            const res = await fetch(`${API_BASE}/api/users/update-profile`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -71,7 +72,7 @@ export default function SettingsPage() {
 
             // 2. Change password (if filled)
             if (passwordForm.currentPassword && passwordForm.newPassword) {
-                await fetch("http://localhost:5000/api/auth/change-password", {
+                const res = await fetch(`${API_BASE}/api/auth/change-password`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -97,7 +98,7 @@ export default function SettingsPage() {
             const token = localStorage.getItem("accessToken");
             if (!token) return;
 
-            const res = await fetch("http://localhost:5000/api/auth/delete-account", {
+            const res = await fetch(`${API_BASE}/api/auth/delete-account`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

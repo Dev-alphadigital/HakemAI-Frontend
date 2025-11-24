@@ -10,6 +10,7 @@ export default function UploadPage() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [showModal, setShowModal] = useState(false);
+    const API_BASE = process.env.NEXT_PUBLIC_FASTAPI_API;
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
@@ -50,7 +51,7 @@ export default function UploadPage() {
             // ✅ Show modal instantly
             setShowModal(true);
 
-            const res = await fetch("http://localhost:8000/api/compare-quotes", {
+            const res = await fetch(`${API_BASE}/api/compare-quotes`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,

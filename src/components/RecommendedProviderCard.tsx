@@ -77,9 +77,9 @@ export default function RecommendedProviderCard() {
         }
     }, []);
 
-    const handleAllProvidersClick = () => {
-        router.push("/dashboard/all-providers");
-    };
+    // const handleAllProvidersClick = () => {
+    //     router.push("/dashboard/all-providers");
+    // };
 
     if (!provider) return null;
 
@@ -98,7 +98,7 @@ export default function RecommendedProviderCard() {
 
             {/* Foreground card */}
             <div
-                onClick={handleAllProvidersClick}
+                // onClick={handleAllProvidersClick}
                 className="absolute cursor-pointer hover:scale-[1.02] transition-all bottom-3 left-3 bg-white rounded-3xl lg:rounded-xl shadow-md px-4 py-3 lg:py-6 border border-gray-100 w-[85%] md:w-[70%] lg:w-[45%] xl:w-[40%] 2xl:w-[35%]"
             >
                 {/* Header */}

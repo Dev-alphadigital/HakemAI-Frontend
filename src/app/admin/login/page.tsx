@@ -1,11 +1,17 @@
 "use client";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { adminLogin, saveAdminToken } from "@/app/lib/adminApi";
+import { useAdminAuth } from "@/context/AdminAuthContext";
 
 export default function SignupPage() {
+    const router = useRouter();
+    const { setAdmin } = useAdminAuth();
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -13,11 +19,51 @@ export default function SignupPage() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        setError(""); // Clear error on input change
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Signup Data:", formData);
+        setLoading(true);
+        setError("");
+
+        try {
+            const response = await adminLogin(formData);
+
+            // Validate response structure
+            if (!response || !response.accessToken || !response.admin) {
+                throw new Error("Invalid response from server");
+            }
+
+            // Map backend response to frontend format
+            const adminUser = {
+                _id: response.admin.id,
+                username: response.admin.username,
+                email: response.admin.email,
+                role: response.admin.role,
+            };
+
+            saveAdminToken(response.accessToken);
+            setAdmin(adminUser);
+            router.push("/admin/dashboard");
+        } catch (err: any) {
+            console.error("Login error:", err);
+
+            // Better error message handling
+            let errorMessage = "Login failed. Please check your credentials.";
+
+            if (err?.message) {
+                errorMessage = err.message;
+            } else if (err?.error) {
+                errorMessage = err.error;
+            } else if (typeof err === 'string') {
+                errorMessage = err;
+            }
+
+            setError(errorMessage);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -67,6 +113,12 @@ export default function SignupPage() {
 
                     <div className="text-center text-gray-500 text-sm">Sign in to manage users, monitor activities and control AI system settings</div>
 
+                    {error && (
+                        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                            {error}
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-4">
 
                         {/* Email */}
@@ -114,9 +166,10 @@ export default function SignupPage() {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-[#fdc431] to-[#04786b] text-white font-semibold py-3 rounded-md shadow-[0_8px_20px_rgba(0,0,0,0.25)] hover:opacity-95 transition cursor-pointer"
+                            disabled={loading}
+                            className="w-full bg-gradient-to-r from-[#fdc431] to-[#04786b] text-white font-semibold py-3 rounded-md shadow-[0_8px_20px_rgba(0,0,0,0.25)] hover:opacity-95 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Admin Login
+                            {loading ? "Logging in..." : "Admin Login"}
                         </button>
                     </form>
                 </div>
