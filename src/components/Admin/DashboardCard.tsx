@@ -17,11 +17,11 @@ import {
 } from "react-icons/fa";
 import FreezeAccountModal from "./FreezeAccountModal";
 import { useRouter } from "next/navigation";
-import { 
-    User, 
-    assignPlan, 
-    freezeAccount, 
-    unfreezeAccount, 
+import {
+    User,
+    assignPlan,
+    freezeAccount,
+    unfreezeAccount,
     downloadPaymentProof,
     SubscriptionPlan
 } from "@/app/lib/adminApi";
@@ -48,7 +48,7 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
     const getUserId = (user: User): string => {
         return user._id || (user as any).id || '';
     };
-    
+
     const userId = getUserId(user);
 
     // calculate dropdown position
@@ -89,11 +89,11 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
             alert("Error: User ID is missing");
             return;
         }
-        
+
         try {
             setLoading(true);
             let planEnum: SubscriptionPlan;
-            
+
             if (plan.includes("Starter")) {
                 planEnum = SubscriptionPlan.STARTER;
             } else if (plan.includes("Professional")) {
@@ -103,11 +103,11 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
             } else {
                 return;
             }
-            
+
             await assignPlan(userId, planEnum);
             setOpenMenu(false);
             setAccessOpen(false);
-            
+
             // Refresh to show updated plan
             await onRefresh();
         } catch (err: any) {
@@ -128,7 +128,7 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
             await freezeAccount(userId);
             setFreezeOpen(false);
             setOpenMenu(false);
-            
+
             // Refresh to show updated status
             await onRefresh();
         } catch (err: any) {
@@ -149,7 +149,7 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
             await unfreezeAccount(userId);
             setUnfreezeOpen(false);
             setOpenMenu(false);
-            
+
             // Refresh to show updated status
             await onRefresh();
         } catch (err: any) {
@@ -186,10 +186,10 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString("en-US", { 
-            month: "short", 
-            day: "numeric", 
-            year: "numeric" 
+        return date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
         });
     };
 
@@ -232,11 +232,10 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
                 <span className="px-3 py-1 rounded-md text-sm font-medium text-white bg-[#00796b]">
                     {user.subscription?.plan || "No Plan"}
                 </span>
-                <span className={`px-3 py-1 rounded-md text-xs font-medium ${
-                    user.accountStatus === 'ACTIVE' ? 'bg-green-100 text-green-700' :
-                    user.accountStatus === 'FROZEN' ? 'bg-red-100 text-red-700' :
-                    'bg-yellow-100 text-yellow-700'
-                }`}>
+                <span className={`px-3 py-1 rounded-md text-xs font-medium ${user.accountStatus === 'ACTIVE' ? 'bg-green-100 text-green-700' :
+                        user.accountStatus === 'FROZEN' ? 'bg-red-100 text-red-700' :
+                            'bg-yellow-100 text-yellow-700'
+                    }`}>
                     {user.accountStatus}
                 </span>
             </div>
@@ -273,7 +272,6 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
                             {accessOpen && (
                                 <div className="pl-4 pr-4 py-3 space-y-2 border-b border-gray-100 bg-gray-50">
                                     {[
-                                        "No access",
                                         "Starter – SAR 599",
                                         "Professional – SAR 999",
                                         "Premium – SAR 1,875",

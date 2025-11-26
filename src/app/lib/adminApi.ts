@@ -33,6 +33,7 @@ export interface User {
     };
     createdAt: string;
     updatedAt: string;
+    subscriptionPlan: string;
 }
 
 export interface Statistics {

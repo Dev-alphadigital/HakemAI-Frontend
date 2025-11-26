@@ -12,11 +12,11 @@ import {
 } from "react-icons/fa6";
 import FreezeAccountModal from "./FreezeAccountModal";
 import { useRouter } from "next/navigation";
-import { 
-    User, 
-    assignPlan, 
-    freezeAccount, 
-    unfreezeAccount, 
+import {
+    User,
+    assignPlan,
+    freezeAccount,
+    unfreezeAccount,
     downloadPaymentProof,
     SubscriptionPlan,
     getPaymentProofUrl
@@ -62,11 +62,11 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
             alert("Error: User ID is missing");
             return;
         }
-        
+
         try {
             setLoading(true);
             let planEnum: SubscriptionPlan;
-            
+
             if (plan.includes("Starter")) {
                 planEnum = SubscriptionPlan.STARTER;
             } else if (plan.includes("Professional")) {
@@ -76,15 +76,15 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
             } else {
                 return;
             }
-            
+
             console.log("Assigning plan:", { userId, planEnum });
             const result = await assignPlan(userId, planEnum);
             console.log("Plan assigned successfully:", result);
-            
+
             // Close dropdown and refresh
             setOpenIndex(null);
             setAccessOpen(false);
-            
+
             // Refresh data to show updated plan
             console.log("Refreshing user data...");
             await onRefresh();
@@ -99,19 +99,19 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
 
     const handleFreeze = async () => {
         if (!selectedUser) return;
-        
+
         const userId = getUserId(selectedUser);
         if (!userId) {
             alert("Error: User ID is missing");
             return;
         }
-        
+
         try {
             setLoading(true);
             await freezeAccount(userId);
             setFreezeOpen(false);
             setOpenIndex(null);
-            
+
             // Refresh to show updated status
             await onRefresh();
         } catch (err: any) {
@@ -124,19 +124,19 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
 
     const handleUnfreeze = async () => {
         if (!selectedUser) return;
-        
+
         const userId = getUserId(selectedUser);
         if (!userId) {
             alert("Error: User ID is missing");
             return;
         }
-        
+
         try {
             setLoading(true);
             await unfreezeAccount(userId);
             setUnfreezeOpen(false);
             setOpenIndex(null);
-            
+
             // Refresh to show updated status
             await onRefresh();
         } catch (err: any) {
@@ -152,7 +152,7 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
             alert("User ID is missing");
             return;
         }
-        
+
         try {
             setLoading(true);
             const blob = await downloadPaymentProof(userId);
@@ -174,10 +174,10 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString("en-US", { 
-            month: "short", 
-            day: "numeric", 
-            year: "numeric" 
+        return date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
         });
     };
 
@@ -190,6 +190,7 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
                         <th className="p-3">Phone number</th>
                         <th className="p-3">Invoice</th>
                         <th className="p-3">Status</th>
+                        <th className="p-3">Plan</th>
                         <th className="p-3">Date joined</th>
                         <th className="p-3 text-right"></th>
                     </tr>
@@ -198,43 +199,43 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
                     {users.map((user, i) => {
                         const userId = getUserId(user);
                         return (
-                        <tr key={userId || i} className="hover:bg-gray-100">
-                            <td className="p-3">
-                                <div className="flex flex-col">
-                                    <span className="font-semibold">{user.username}</span>
-                                    <span className="text-gray-500 text-xs">{user.email}</span>
-                                </div>
-                            </td>
-                            <td className="p-3">{user.phoneNumber || "N/A"}</td>
-                            <td className="p-3 text-teal-700 underline cursor-pointer" onClick={() => handleDownloadPaymentProof(userId)}>
-                                View Proof
-                            </td>
-                            <td className="p-3">
-                                <span className={`inline-flex px-2 py-1 rounded-md text-xs font-medium ${
-                                    user.accountStatus?.toUpperCase() === 'ACTIVE' ? 'bg-green-100 text-green-700' :
-                                    user.accountStatus?.toUpperCase() === 'FROZEN' ? 'bg-red-100 text-red-700' :
-                                    'bg-yellow-100 text-yellow-700'
-                                }`}>
-                                    {user.accountStatus}
-                                </span>
-                            </td>
-                            <td className="p-3">{formatDate(user.createdAt)}</td>
-                            <td className="p-3 text-right relative">
-                                <button
-                                    ref={(el) => {
-                                        buttonRefs.current[i] = el;
-                                    }}
-                                    onClick={() => {
-                                        setAccessOpen(false);
-                                        setOpenIndex(openIndex === i ? null : i);
-                                        setSelectedUser(user);
-                                    }}
-                                    className="p-2.5 rounded-full cursor-pointer hover:bg-gradient-to-r hover:from-teal-50 hover:to-yellow-50 transition-all duration-200 hover:shadow-md"
-                                >
-                                    <FaEllipsisV className="text-gray-600 hover:text-teal-700" />
-                                </button>
-                            </td>
-                        </tr>
+                            <tr key={userId || i} className="hover:bg-gray-100">
+                                <td className="p-3">
+                                    <div className="flex flex-col">
+                                        <span className="font-semibold">{user.username}</span>
+                                        <span className="text-gray-500 text-xs">{user.email}</span>
+                                    </div>
+                                </td>
+                                <td className="p-3">{user.phoneNumber || "N/A"}</td>
+                                <td className="p-3 text-teal-700 underline cursor-pointer" onClick={() => handleDownloadPaymentProof(userId)}>
+                                    View Proof
+                                </td>
+                                <td className="p-3">
+                                    <span className={`inline-flex px-2 py-1 rounded-md text-xs font-medium ${user.accountStatus?.toUpperCase() === 'ACTIVE' ? 'bg-green-100 text-green-700' :
+                                        user.accountStatus?.toUpperCase() === 'FROZEN' ? 'bg-red-100 text-red-700' :
+                                            'bg-yellow-100 text-yellow-700'
+                                        }`}>
+                                        {user.accountStatus}
+                                    </span>
+                                </td>
+                                <td className="p-3 capitalize">{user.subscriptionPlan || "Not Assigned"}</td>
+                                <td className="p-3">{formatDate(user.createdAt)}</td>
+                                <td className="p-3 text-right relative">
+                                    <button
+                                        ref={(el) => {
+                                            buttonRefs.current[i] = el;
+                                        }}
+                                        onClick={() => {
+                                            setAccessOpen(false);
+                                            setOpenIndex(openIndex === i ? null : i);
+                                            setSelectedUser(user);
+                                        }}
+                                        className="p-2.5 rounded-full cursor-pointer hover:bg-gradient-to-r hover:from-teal-50 hover:to-yellow-50 transition-all duration-200 hover:shadow-md"
+                                    >
+                                        <FaEllipsisV className="text-gray-600 hover:text-teal-700" />
+                                    </button>
+                                </td>
+                            </tr>
                         );
                     })}
                 </tbody>
@@ -269,7 +270,6 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
                         {accessOpen && (
                             <div className="pl-4 pr-4 py-3 space-y-2 border-b border-gray-100 bg-gray-50">
                                 {[
-                                    "No access",
                                     "Starter – SAR 599",
                                     "Professional – SAR 999",
                                     "Premium – SAR 1,875",

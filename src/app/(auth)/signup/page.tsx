@@ -120,7 +120,7 @@ export default function SignupPage() {
                 <input
                   type="text"
                   name="username"
-                  placeholder="Username"
+                  placeholder="John"
                   value={formData.username}
                   onChange={handleChange}
                   required
@@ -135,7 +135,7 @@ export default function SignupPage() {
                 <input
                   type="email"
                   name="email"
-                  placeholder="Email"
+                  placeholder="john@gmail.com"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -150,7 +150,7 @@ export default function SignupPage() {
                 <input
                   type="text"
                   name="phone"
-                  placeholder="Phone number"
+                  placeholder="+966532833635"
                   value={formData.phone}
                   onChange={handleChange}
                   required
@@ -165,7 +165,7 @@ export default function SignupPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder="Password"
+                  placeholder="********"
                   value={formData.password}
                   onChange={handleChange}
                   required
