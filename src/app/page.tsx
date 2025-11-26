@@ -158,9 +158,11 @@ export default function Home() {
               smart automation.
             </p>
 
-            <button className="bg-[#fdc431] cursor-pointer text-black font-semibold px-6 py-3 rounded-md shadow-md hover:bg-yellow-300 transition">
-              Get Your Comparison Now
-            </button>
+            <Link href="/dashboard">
+              <button className="bg-[#fdc431] cursor-pointer text-black font-semibold px-6 py-3 rounded-md shadow-md hover:bg-yellow-300 transition">
+                Get Your Comparison Now
+              </button>
+            </Link>
           </div>
 
           {/* RIGHT IMAGE (two phones as one image) */}
@@ -204,9 +206,9 @@ export default function Home() {
               companies and helps you find the best plan in seconds.
             </p>
 
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 items-center">
               <FaEnvelope className="text-[#fdc431]" />
-              <p className="text-[#fdc431] text-sm font-semibold tracking-wide justify-center">
+              <p className="text-[#fdc431] text-sm font-semibold tracking-wide">
                 info@hakem.ai
               </p>
             </div>

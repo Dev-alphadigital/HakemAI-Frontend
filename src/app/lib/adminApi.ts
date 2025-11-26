@@ -1,4 +1,4 @@
-export const API_BASE = "http://localhost:5000/api";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // ============= TYPES =============
 export interface AdminLoginData {
@@ -82,7 +82,7 @@ async function handleResponse<T>(res: Response): Promise<T> {
 // ============= ADMIN AUTH =============
 export async function adminLogin(loginData: AdminLoginData): Promise<AdminLoginResponse> {
     try {
-        const res = await fetch(`${API_BASE}/admin/login`, {
+        const res = await fetch(`${API_BASE}/api/admin/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(loginData),
@@ -114,7 +114,7 @@ export function removeAdminToken() {
 
 // ============= STATISTICS =============
 export async function getStatistics(): Promise<Statistics> {
-    const res = await fetch(`${API_BASE}/admin/statistics`, {
+    const res = await fetch(`${API_BASE}/api/admin/statistics`, {
         headers: getAuthHeaders(),
     });
     return handleResponse<Statistics>(res);
@@ -122,7 +122,7 @@ export async function getStatistics(): Promise<Statistics> {
 
 // ============= USER MANAGEMENT =============
 export async function getAllUsers(): Promise<User[]> {
-    const res = await fetch(`${API_BASE}/admin/allusers`, {
+    const res = await fetch(`${API_BASE}/api/admin/allusers`, {
         headers: getAuthHeaders(),
     });
     const data = await handleResponse<any>(res);
@@ -131,7 +131,7 @@ export async function getAllUsers(): Promise<User[]> {
 }
 
 export async function getPendingUsers(): Promise<User[]> {
-    const res = await fetch(`${API_BASE}/admin/pending-users`, {
+    const res = await fetch(`${API_BASE}/api/admin/pending-users`, {
         headers: getAuthHeaders(),
     });
     const data = await handleResponse<any>(res);
@@ -140,7 +140,7 @@ export async function getPendingUsers(): Promise<User[]> {
 }
 
 export async function getUserById(userId: string): Promise<User> {
-    const res = await fetch(`${API_BASE}/admin/users/${userId}`, {
+    const res = await fetch(`${API_BASE}/api/admin/users/${userId}`, {
         headers: getAuthHeaders(),
     });
     return handleResponse<User>(res);
@@ -148,7 +148,7 @@ export async function getUserById(userId: string): Promise<User> {
 
 // ============= ACCOUNT ACTIONS =============
 export async function activateAccount(userId: string, plan?: SubscriptionPlan): Promise<any> {
-    const res = await fetch(`${API_BASE}/admin/users/${userId}/activate`, {
+    const res = await fetch(`${API_BASE}/api/admin/users/${userId}/activate`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({ plan }),
@@ -157,7 +157,7 @@ export async function activateAccount(userId: string, plan?: SubscriptionPlan): 
 }
 
 export async function assignPlan(userId: string, plan: SubscriptionPlan): Promise<any> {
-    const res = await fetch(`${API_BASE}/admin/users/${userId}/assign-plan`, {
+    const res = await fetch(`${API_BASE}/api/admin/users/${userId}/assign-plan`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({ plan }),
@@ -166,7 +166,7 @@ export async function assignPlan(userId: string, plan: SubscriptionPlan): Promis
 }
 
 export async function freezeAccount(userId: string): Promise<any> {
-    const res = await fetch(`${API_BASE}/admin/users/${userId}/freeze`, {
+    const res = await fetch(`${API_BASE}/api/admin/users/${userId}/freeze`, {
         method: "POST",
         headers: getAuthHeaders(),
     });
@@ -174,7 +174,7 @@ export async function freezeAccount(userId: string): Promise<any> {
 }
 
 export async function unfreezeAccount(userId: string): Promise<any> {
-    const res = await fetch(`${API_BASE}/admin/users/${userId}/unfreeze`, {
+    const res = await fetch(`${API_BASE}/api/admin/users/${userId}/unfreeze`, {
         method: "POST",
         headers: getAuthHeaders(),
     });
@@ -183,7 +183,7 @@ export async function unfreezeAccount(userId: string): Promise<any> {
 
 // ============= PAYMENT PROOF =============
 export async function getUserPaymentProof(userId: string): Promise<PaymentProof> {
-    const res = await fetch(`${API_BASE}/admin/users/${userId}/payment-proof`, {
+    const res = await fetch(`${API_BASE}/api/admin/users/${userId}/payment-proof`, {
         headers: getAuthHeaders(),
     });
     return handleResponse<PaymentProof>(res);
@@ -191,7 +191,7 @@ export async function getUserPaymentProof(userId: string): Promise<PaymentProof>
 
 export async function downloadPaymentProof(userId: string): Promise<Blob> {
     const token = getAdminToken();
-    const res = await fetch(`${API_BASE}/admin/users/${userId}/payment-proof/download`, {
+    const res = await fetch(`${API_BASE}/api/admin/users/${userId}/payment-proof/download`, {
         headers: {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
@@ -206,6 +206,6 @@ export async function downloadPaymentProof(userId: string): Promise<Blob> {
 }
 
 export function getPaymentProofUrl(userId: string): string {
-    return `${API_BASE}/admin/users/${userId}/payment-proof/download`;
+    return `${API_BASE}/api/admin/users/${userId}/payment-proof/download`;
 }
 
