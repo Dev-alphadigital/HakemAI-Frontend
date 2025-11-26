@@ -75,7 +75,7 @@ export default function MyDocumentsPage() {
             const userId = JSON.parse(storedUser).id;
 
             const response = await fetch(
-                `http://ai.hakem.ai/api/my-documents/${documentId}/download`,
+                `https://ai.hakem.ai/api/my-documents/${documentId}/download`,
                 {
                     method: "GET",
                     headers: {
@@ -123,7 +123,7 @@ export default function MyDocumentsPage() {
             if (!confirmDelete) return;
 
             const response = await fetch(
-                `http://ai.hakem.ai/api/my-documents/${documentId}`,
+                `https://ai.hakem.ai/api/my-documents/${documentId}`,
                 {
                     method: "DELETE",
                     headers: {
