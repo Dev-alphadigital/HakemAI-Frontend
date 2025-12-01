@@ -30,7 +30,7 @@ export default function PricingSection() {
             ],
 
             footer: {
-                payment: "Bank transfer only (monthly or quarterly)",
+                payment: "Annual Invoicing",
                 onboarding: "Manual account setup within 24 hours",
             },
         },
@@ -51,7 +51,7 @@ export default function PricingSection() {
             ],
 
             footer: {
-                payment: "Bank transfer or invoice (monthly/annual)",
+                payment: "Annual Invoicing",
                 onboarding: "Guided setup session with dedicated agent",
             },
         },
@@ -67,7 +67,7 @@ export default function PricingSection() {
             features: [
                 "<b>Unlimited comparisons</b> (fair-use policy)",
                 "Compare up to <b>8 quotes/case</b>",
-                "Advanced analytics dashboard",
+                "Team dashboard (upto 5 users)",
                 "Dedicated account manager",
                 "SLA-backed service with performance reporting",
                 "Custom model tuning (optional upgrade)",
@@ -147,7 +147,6 @@ export default function PricingSection() {
                 ))}
             </div>
 
-            {/* MOBILE SWIPER */}
             {/* MOBILE SWIPER */}
             <div className="block md:hidden max-w-sm mx-auto">
                 <Swiper

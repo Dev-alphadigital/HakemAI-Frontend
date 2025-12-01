@@ -261,18 +261,8 @@ export default function Topbar({ setMobileOpen }: TopbarProps) {
                 </div>
             </header>
 
-            {/* MOBILE SEARCH */}
-            {/* <div className="lg:hidden px-6 mt-20 md:px-8">
-                <div className="flex items-center bg-gray-200 rounded-full px-3 py-3 w-full">
-                    <FaSearch className="text-gray-500 text-sm mr-2" />
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className="bg-transparent text-sm outline-none flex-1 text-gray-700"
-                    />
-                    <FaFilter className="text-gray-500 text-base cursor-pointer" />
-                </div>
-            </div> */}
+            {/* Topbar and bottom content spacing on mobile screens */}
+            <div className="lg:hidden px-6 mt-20 md:px-8"></div>
         </>
     );
 }
