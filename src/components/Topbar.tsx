@@ -2,14 +2,13 @@
 // import { useState } from "react";
 // import {
 //     FaBars,
-//     FaBell,
-//     FaPlus,
 //     FaFilter,
 //     FaSearch,
 //     FaChevronDown,
 // } from "react-icons/fa";
 // import Image from "next/image";
 // import { useRouter } from "next/navigation";
+// import { useAuth } from "@/context/AuthContext";
 
 // interface TopbarProps {
 //     setMobileOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,11 +18,13 @@
 //     const router = useRouter();
 //     const [filterOpen, setFilterOpen] = useState(false);
 
+//     const { user, loading } = useAuth();
+
 //     return (
 //         <>
-//             {/* ===== FIXED TOP ICON BAR ===== */}
 //             <header className="fixed top-0 left-0 right-0 z-40 bg-white border-b lg:border-none border-gray-200 lg:bg-[#e8f1ed]">
-//                 {/* ===== MOBILE VIEW ===== */}
+
+//                 {/* MOBILE VIEW */}
 //                 <div className="flex lg:hidden items-center justify-between px-6 py-3 md:px-9">
 //                     <FaBars
 //                         className="text-gray-800 text-xl cursor-pointer"
@@ -31,24 +32,22 @@
 //                     />
 
 //                     <div className="flex items-center gap-4">
-//                         {/* <FaPlus className="text-gray-700 text-lg cursor-pointer" />
-//                         <FaBell className="text-gray-700 text-lg cursor-pointer" /> */}
 //                         <Image
 //                             src="/images/profile.png"
 //                             alt="User"
 //                             width={44}
 //                             height={44}
-//                             className="rounded-full cursor-pointer"
+//                             className="cursor-pointer"
 //                             onClick={() => router.push("/dashboard/profile")}
 //                         />
 //                     </div>
 //                 </div>
 
-//                 {/* ===== DESKTOP VIEW ===== */}
+//                 {/* DESKTOP VIEW */}
 //                 <div className="hidden lg:grid grid-cols-3 items-center px-6 py-4 w-full">
-//                     {/* LEFT SECTION */}
+
+//                     {/* LEFT */}
 //                     <div className="flex items-center gap-5">
-//                         {/* Logo */}
 //                         <div className="flex items-center gap-3">
 //                             <Image
 //                                 src="/logo/logo.svg"
@@ -63,7 +62,7 @@
 //                         </div>
 //                     </div>
 
-//                     {/* CENTER SECTION (Centered Search Bar) */}
+//                     {/* CENTER */}
 //                     <div className="flex justify-center">
 //                         <div className="relative flex items-center bg-[#d9d9d9] rounded-md px-3 py-3 w-96 xl:w-[30rem] 2xl:w-[36rem] shadow-sm">
 //                             <div
@@ -81,7 +80,6 @@
 //                             />
 //                             <FaSearch className="text-gray-500 text-sm cursor-pointer" />
 
-//                             {/* Filter Dropdown */}
 //                             {filterOpen && (
 //                                 <div className="absolute top-11 left-2 bg-white border border-gray-200 shadow-md rounded-md p-2 text-sm w-36">
 //                                     <label className="flex items-center gap-2 cursor-pointer py-1 px-2 hover:bg-gray-50 rounded">
@@ -98,10 +96,8 @@
 //                         </div>
 //                     </div>
 
-//                     {/* RIGHT SECTION */}
+//                     {/* RIGHT */}
 //                     <div className="flex items-center justify-end gap-6">
-//                         {/* <FaPlus className="text-gray-700 text-lg cursor-pointer" /> */}
-//                         {/* <FaBell className="text-gray-700 text-lg cursor-pointer" /> */}
 //                         <div className="flex items-center gap-2">
 //                             <Image
 //                                 src="/images/profile.png"
@@ -109,18 +105,23 @@
 //                                 width={44}
 //                                 height={44}
 //                                 className="rounded-full cursor-pointer"
-//                                 onClick={() => (router.push("/dashboard/settings"))}
+//                                 onClick={() => router.push("/dashboard/settings")}
 //                             />
+
 //                             <div className="flex flex-col leading-tight">
-//                                 <span className="text-gray-800 font-medium text-sm">James</span>
-//                                 <span className="text-gray-500 text-xs">user</span>
+//                                 <span className="text-gray-800 font-medium text-sm">
+//                                     {loading ? "…" : user?.username || "User"}
+//                                 </span>
+//                                 <span className="text-gray-500 text-xs capitalize">
+//                                     {loading ? "…" : user?.role || "user"}
+//                                 </span>
 //                             </div>
 //                         </div>
 //                     </div>
 //                 </div>
 //             </header>
 
-//             {/* ===== MOBILE SEARCH BAR (OUTSIDE FIXED HEADER) ===== */}
+//             {/* MOBILE SEARCH */}
 //             <div className="lg:hidden px-6 mt-20 md:px-8">
 //                 <div className="flex items-center bg-gray-200 rounded-full px-3 py-3 w-full">
 //                     <FaSearch className="text-gray-500 text-sm mr-2" />
@@ -202,7 +203,7 @@ export default function Topbar({ setMobileOpen }: TopbarProps) {
                     </div>
 
                     {/* CENTER */}
-                    <div className="flex justify-center">
+                    {/* <div className="flex justify-center">
                         <div className="relative flex items-center bg-[#d9d9d9] rounded-md px-3 py-3 w-96 xl:w-[30rem] 2xl:w-[36rem] shadow-sm">
                             <div
                                 className="flex items-center gap-1 text-gray-600 text-sm cursor-pointer select-none pr-2 border-r border-gray-600"
@@ -233,10 +234,10 @@ export default function Topbar({ setMobileOpen }: TopbarProps) {
                                 </div>
                             )}
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* RIGHT */}
-                    <div className="flex items-center justify-end gap-6">
+                    <div className="flex items-center justify-end ml-[37.5rem] xl:ml-[54.7rem] 2xl:ml-[74.7rem] gap-6">
                         <div className="flex items-center gap-2">
                             <Image
                                 src="/images/profile.png"
@@ -261,7 +262,7 @@ export default function Topbar({ setMobileOpen }: TopbarProps) {
             </header>
 
             {/* MOBILE SEARCH */}
-            <div className="lg:hidden px-6 mt-20 md:px-8">
+            {/* <div className="lg:hidden px-6 mt-20 md:px-8">
                 <div className="flex items-center bg-gray-200 rounded-full px-3 py-3 w-full">
                     <FaSearch className="text-gray-500 text-sm mr-2" />
                     <input
@@ -271,7 +272,7 @@ export default function Topbar({ setMobileOpen }: TopbarProps) {
                     />
                     <FaFilter className="text-gray-500 text-base cursor-pointer" />
                 </div>
-            </div>
+            </div> */}
         </>
     );
 }
