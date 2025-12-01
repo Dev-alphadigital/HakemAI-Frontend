@@ -60,8 +60,8 @@ export default function SettingsPage() {
             const token = localStorage.getItem("accessToken");
             if (!token) return alert("Session expired");
 
-            // 1. Update profile
-            const res = await fetch(`${API_BASE}/api/users/update-profile`, {
+            // 1. UPDATE PROFILE
+            const profileRes = await fetch(`${API_BASE}/api/auth/update-profile`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -70,9 +70,15 @@ export default function SettingsPage() {
                 body: JSON.stringify(profile),
             });
 
-            // 2. Change password (if filled)
+            // Check if profile update failed
+            if (!profileRes.ok) {
+                const err = await profileRes.json();
+                return alert(err.message || "Failed to update profile");
+            }
+
+            // 2. CHANGE PASSWORD (only if both fields filled)
             if (passwordForm.currentPassword && passwordForm.newPassword) {
-                const res = await fetch(`${API_BASE}/api/auth/change-password`, {
+                const passRes = await fetch(`${API_BASE}/api/auth/change-password`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -83,9 +89,16 @@ export default function SettingsPage() {
                         newPassword: passwordForm.newPassword,
                     }),
                 });
+
+                // If password update failed
+                if (!passRes.ok) {
+                    const err = await passRes.json();
+                    return alert(err.message || "Failed to update password");
+                }
             }
 
             alert("Profile updated successfully!");
+
         } catch (error) {
             console.error("Error updating:", error);
             alert("Something went wrong.");
@@ -196,10 +209,8 @@ export default function SettingsPage() {
                                         <input
                                             type="email"
                                             value={profile.email}
-                                            onChange={(e) =>
-                                                setProfile({ ...profile, email: e.target.value })
-                                            }
-                                            className="w-full bg-transparent outline-none text-gray-900"
+                                            disabled
+                                            className="w-full bg-transparent outline-none text-gray-900 opacity-60 cursor-not-allowed"
                                         />
                                     </div>
                                 </div>
