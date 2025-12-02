@@ -185,8 +185,18 @@ export default function SignupPage() {
                         </button>
                     </form>
 
+                    {/* Forgot password Link */}
+                    <p className="text-center text-sm mt-10 text-gray-700">
+                        Forgot password?{" "}
+                        <Link href="/forgot-password"
+                            className="text-[#04786b] font-semibold hover:underline"
+                        >
+                            Click here
+                        </Link>
+                    </p>
+
                     {/* Signup Link */}
-                    <p className="text-center text-sm text-gray-700">
+                    <p className="text-center text-sm -mt-4 text-gray-700">
                         Don't have an account yet?{" "}
                         <Link href="/signup"
                             className="text-[#04786b] font-semibold hover:underline"
