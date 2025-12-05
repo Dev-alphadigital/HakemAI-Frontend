@@ -45,20 +45,6 @@ export default function SignupPage() {
             <div className="flex flex-1 flex-col justify-center items-center px-8 md:px-16 py-10 lg:py-0">
                 <div className="w-full max-w-lg space-y-8">
 
-                    {/* Mobile Logo */}
-                    {/* <div className="flex justify-center lg:hidden mb-4">
-                        <div className="w-24 h-24 flex items-center justify-center">
-                            <Image
-                                src="/logo/logo.svg"
-                                alt="Hakem AI Logo"
-                                width={150}
-                                height={150}
-                                className="object-contain rounded-full"
-                                priority
-                            />
-                        </div>
-                    </div> */}
-
                     <div className="flex item-center justify-center">
                         <Image
                             src="/icons/Verified.svg"
@@ -80,19 +66,17 @@ export default function SignupPage() {
                         <p className="text-red-500 text-center font-medium">{error}</p>
                     )}
 
-                    {/* ===== FORM ===== */}
-                    <form className="space-y-4">
-                        {/* Submit */}
-                        <div className="flex item-center justify-center mt-8">
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-72 bg-gradient-to-r from-[#fdc431] to-[#04786b] text-white font-semibold py-3 rounded-md shadow-[0_8px_20px_rgba(0,0,0,0.25)] hover:opacity-95 transition cursor-pointer"
-                            >
-                                {loading ? "Redirecting..." : "Go to Dashboard"}
-                            </button>
-                        </div>
-                    </form>
+                    {/* Submit */}
+                    <div className="flex item-center justify-center mt-8">
+                        <button
+                            type="submit"
+                            onClick={() => router.push("/login")}
+                            disabled={loading}
+                            className="w-72 bg-gradient-to-r from-[#fdc431] to-[#04786b] text-white font-semibold py-3 rounded-md shadow-[0_8px_20px_rgba(0,0,0,0.25)] hover:opacity-95 transition cursor-pointer"
+                        >
+                            {loading ? "Redirecting..." : "Go to Login"}
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>

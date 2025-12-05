@@ -46,14 +46,9 @@ export default function SignupPage() {
         setError(data?.message || "Signup failed");
         return;
       }
-
-      setSuccess(data.message || "Signup successful!");
-
-      // redirect after 1.5 seconds
-      setTimeout(() => {
-        router.push("/login");
-      }, 1500);
-
+      setSuccess(data.message || "Signup successful! Code sent to your email.");
+      localStorage.setItem("verifyEmail", formData.email.toLowerCase());
+      router.push("/verify");
     } catch (err: any) {
       setError("Something went wrong. Try again.");
     }

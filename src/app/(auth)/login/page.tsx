@@ -38,8 +38,14 @@ export default function SignupPage() {
             const data = await res.json();
 
             if (!res.ok) {
-                setLoading(false);
-                setError(data?.message || "Invalid login credentials");
+                if (data?.message?.includes("Email not verified")) {
+                    // Store email for verification page to use again
+                    localStorage.setItem("verifyEmail", formData.email.toLowerCase());
+                    router.push("/verify");
+                    return;
+                }
+
+                setError(data.message || "Login failed");
                 return;
             }
 
