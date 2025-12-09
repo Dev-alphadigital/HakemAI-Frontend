@@ -35,6 +35,8 @@ export default function CompanyTeamAccess() {
                 <div className="px-4 md:px-8">
                     <div className="bg-white shadow-md rounded-xl p-4 md:p-6">
 
+                        <div className="mb-2">Plan:</div>
+
                         {/* COMPANY NAME + EDIT ICON */}
                         <div className="flex items-start justify-between mb-4">
                             <div>
