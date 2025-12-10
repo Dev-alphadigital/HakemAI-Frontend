@@ -7,6 +7,9 @@ interface User {
     email: string;
     phoneNumber: string;
     role: string;
+    isSubUser?: boolean;  // ✅ NEW: True if user is a team member (view-only)
+    companyId?: string;   // ✅ NEW: Company ID for sub-users
+    accountStatus?: string; // Account status (active, pending, frozen)
 }
 
 interface AuthContextType {
@@ -41,6 +44,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             const data = await res.json();
             setUser(data);
+
+            // Update cookies and localStorage with fresh user data
+            // This ensures middleware has the latest user info (including isSubUser, accountStatus)
+            localStorage.setItem("user", JSON.stringify(data));
+            document.cookie = `user=${encodeURIComponent(JSON.stringify(data))}; path=/; max-age=604800`;
         } catch (err) {
             console.error("Profile load failed:", err);
         } finally {

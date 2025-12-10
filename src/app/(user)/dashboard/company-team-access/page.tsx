@@ -225,15 +225,18 @@ export default function CompanyTeamAccess() {
             const result = await res.json();
 
             if (!res.ok) {
-                alert(result.message);
+                alert(result.message || "Failed to add team member");
                 return;
             }
 
+            // Success - clear search and refresh team
             setSearchQuery("");
             setSearchResults([]);
-            fetchTeam();
+            await fetchTeam();
+            alert("Team member added successfully!");
         } catch (err) {
             console.log("❌ Add user error:", err);
+            alert("Failed to add team member. Please try again.");
         } finally {
             setLoading(false);
         }

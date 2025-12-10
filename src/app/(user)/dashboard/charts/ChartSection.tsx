@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import BarChart from "./BarChart";
+import { loadComparisonData } from "@/utils/comparisonSync";
 
 export default function ChartSection() {
     const [providers, setProviders] = useState<string[]>([]);
@@ -9,36 +10,40 @@ export default function ChartSection() {
     const [scores, setScores] = useState<number[]>([]);
 
     useEffect(() => {
-        const stored = localStorage.getItem("comparisonResult");
-        if (!stored) return;
+        const loadChartData = async () => {
+            try {
+                const result = await loadComparisonData();
+                if (!result || !result.provider_cards) return;
 
-        const result = JSON.parse(stored);
+                const names = result.provider_cards.map((p: any) => p.provider_name);
 
-        if (!result.provider_cards) return;
+                const premiumValues = result.provider_cards.map((p: any) =>
+                    parseFloat(
+                        p.premium
+                            .replace("SAR", "")
+                            .replace(/,/g, "")
+                            .trim()
+                    )
+                );
 
-        const names = result.provider_cards.map((p: any) => p.provider_name);
+                const rateValues = result.provider_cards.map((p: any) =>
+                    parseFloat(p.rate.replace("‰", ""))
+                );
 
-        const premiumValues = result.provider_cards.map((p: any) =>
-            parseFloat(
-                p.premium
-                    .replace("SAR", "")
-                    .replace(/,/g, "")
-                    .trim()
-            )
-        );
+                const scoreValues = result.provider_cards.map((p: any) =>
+                    parseFloat(p.score)
+                );
 
-        const rateValues = result.provider_cards.map((p: any) =>
-            parseFloat(p.rate.replace("‰", ""))
-        );
+                setProviders(names);
+                setPremiums(premiumValues);
+                setRates(rateValues);
+                setScores(scoreValues);
+            } catch (err) {
+                console.error("Error loading chart data:", err);
+            }
+        };
 
-        const scoreValues = result.provider_cards.map((p: any) =>
-            parseFloat(p.score)
-        );
-
-        setProviders(names);
-        setPremiums(premiumValues);
-        setRates(rateValues);
-        setScores(scoreValues);
+        loadChartData();
     }, []);
 
     if (providers.length === 0) return null;

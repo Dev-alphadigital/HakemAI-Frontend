@@ -59,9 +59,16 @@ export default function SignupPage() {
 
             await refreshUser();
 
-            if (data.user.accountStatus === "pending") {
+            // Sub-users (team members) always go to dashboard
+            if (data.user.isSubUser === true) {
+                router.push("/dashboard");
+            }
+            // Pending users (not yet verified by admin) go to payment page
+            else if (data.user.accountStatus === "pending") {
                 router.push("/plans-pricing");
-            } else {
+            }
+            // Active users go to dashboard
+            else {
                 router.push("/dashboard");
             }
 

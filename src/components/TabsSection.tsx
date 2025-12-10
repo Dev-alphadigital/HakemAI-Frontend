@@ -7,10 +7,12 @@ import DataTable from "./DataTable";
 import KeyDifferences from "./KeyDifferences";
 import PdfReport from "./PdfReport";
 import SideBySide from "./SideBySide";
+import { loadComparisonData } from "@/utils/comparisonSync";
 
 export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
     const [activeTab, setActiveTab] = useState("Summary");
     const [comparison, setComparison] = useState<any>(null);
+    const [lastUpdateTime, setLastUpdateTime] = useState<number>(Date.now());
 
     const normalizeName = (name: string) =>
         name?.toLowerCase().replace(/[^a-z0-9]/g, "").trim();
@@ -31,20 +33,57 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
 
 
     useEffect(() => {
-        const stored = localStorage.getItem("comparisonResult");
-
-        if (stored) {
+        const loadComparison = async () => {
             try {
-                const parsed = JSON.parse(stored);
-                setComparison(parsed);
-            } catch (err) {
-                console.error("❌ Failed to parse comparisonResult:", err);
+                console.log('🔄 TabsSection: Loading comparison data...');
+                const data = await loadComparisonData();
+                console.log('📊 TabsSection: Loaded data:', data ? 'Data found' : 'No data');
+                console.log('📦 TabsSection: Data structure:', data ? Object.keys(data) : 'null');
+                
+                if (data) {
+                    setComparison(data);
+                    setLastUpdateTime(Date.now());
+                    console.log('✅ TabsSection: Comparison set successfully');
+                    console.log('✅ Provider cards count:', data.provider_cards?.length || 0);
+                } else {
+                    console.error('❌ TabsSection: No comparison data available');
+                    // Set a fallback message
+                    setComparison(null);
+                }
+            } catch (error) {
+                console.error('❌ TabsSection: Error loading comparison:', error);
+                setComparison(null);
             }
-        }
+        };
+
+        // Load immediately
+        loadComparison();
+
+        // Auto-refresh every 30 seconds to check for new comparisons
+        const intervalId = setInterval(() => {
+            console.log('🔄 Auto-refresh: Checking for new comparisons...');
+            loadComparison();
+        }, 30000); // 30 seconds
+
+        // Cleanup interval on unmount
+        return () => clearInterval(intervalId);
     }, []);
 
     if (!comparison) {
-        return <div className="text-center py-20">Loading comparison...</div>;
+        return (
+            <div className="text-center py-20">
+                <p className="text-gray-600 mb-4">Loading comparison...</p>
+                <p className="text-sm text-gray-500">
+                    If this takes too long, try refreshing the page or clicking the "Refresh Now" button above.
+                </p>
+                <button 
+                    onClick={() => window.location.reload()} 
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                    Refresh Page
+                </button>
+            </div>
+        );
     }
 
     // ✅ SUMMARY DATA

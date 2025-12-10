@@ -57,6 +57,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { loadComparisonData } from "@/utils/comparisonSync";
 
 export default function RecommendedProviderCard() {
     const router = useRouter();
@@ -64,17 +65,30 @@ export default function RecommendedProviderCard() {
     const [provider, setProvider] = useState<any>(null);
 
     useEffect(() => {
-        const stored = localStorage.getItem("comparisonResult");
-        if (!stored) return;
+        const loadProvider = async () => {
+            try {
+                console.log('🔄 RecommendedProviderCard: Loading...');
+                const result = await loadComparisonData();
+                console.log('📊 RecommendedProviderCard: Got data:', result ? 'yes' : 'no');
+                
+                if (result) {
+                    console.log('📦 Provider cards:', result.provider_cards?.length || 0);
+                    const topProvider = result.provider_cards?.[0];
+                    if (topProvider) {
+                        setProvider(topProvider);
+                        console.log('✅ Top provider set:', topProvider.provider_name);
+                    } else {
+                        console.warn('⚠️ No provider cards found in data');
+                    }
+                } else {
+                    console.error('❌ No comparison data available');
+                }
+            } catch (error) {
+                console.error('❌ Error loading provider:', error);
+            }
+        };
 
-        const result = JSON.parse(stored);
-
-        // Take top recommended provider
-        const topProvider = result.provider_cards?.[0];
-
-        if (topProvider) {
-            setProvider(topProvider);
-        }
+        loadProvider();
     }, []);
 
     // const handleAllProvidersClick = () => {
@@ -84,10 +98,10 @@ export default function RecommendedProviderCard() {
     if (!provider) return null;
 
     return (
-        <div className="relative w-full bg-white rounded-3xl lg:rounded-t-none shadow-sm overflow-hidden mt-2">
+        <div className="relative w-full bg-white rounded-3xl shadow-sm overflow-hidden mt-2">
 
             {/* Background image */}
-            <div className="relative h-40 md:h-52 lg:h-72 xl:h-80 2xl:h-92 w-full">
+            <div className="relative h-40 md:h-52 lg:h-64 xl:h-72 2xl:h-80 w-full">
                 <Image
                     src="/images/provider-bg.png"
                     alt="Provider background"

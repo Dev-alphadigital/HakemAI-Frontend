@@ -29,7 +29,13 @@ export function middleware(req: NextRequest) {
         console.log("Failed to parse user cookie");
     }
 
-    // ✅ If user is pending → Only allow plans-pricing
+    // ✅ Sub-users (team members) → Full access to view comparisons
+    // Sub-users skip the payment screen and can access dashboard
+    if (user?.isSubUser === true) {
+        return NextResponse.next();
+    }
+
+    // ✅ If user is pending (not a sub-user) → Only allow plans-pricing
     if (user?.accountStatus === "pending") {
         if (!pathname.startsWith("/plans-pricing")) {
             const redirectUrl = new URL("/plans-pricing", req.url);

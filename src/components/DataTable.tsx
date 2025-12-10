@@ -1,45 +1,52 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Search, Filter } from "lucide-react";
+import { loadComparisonData } from "@/utils/comparisonSync";
 
 export default function DataTable() {
     const [search, setSearch] = useState("");
     const [tableData, setTableData] = useState<any[]>([]);
 
     useEffect(() => {
-        const stored = localStorage.getItem("comparisonResult");
-        if (!stored) return;
+        const loadTableData = async () => {
+            try {
+                const response = await loadComparisonData();
+                if (!response) return;
 
-        const response = JSON.parse(stored);
+                const providers = response.provider_cards || [];
 
-        const providers = response.provider_cards || [];
+                // Find Coverage chart
+                const coverageChart = response.analytics?.charts?.find(
+                    (chart: any) => chart.title === "Coverage Features Comparison"
+                );
 
-        // Find Coverage chart
-        const coverageChart = response.analytics?.charts?.find(
-            (chart: any) => chart.title === "Coverage Features Comparison"
-        );
+                const coverageData = coverageChart?.data || [];
 
-        const coverageData = coverageChart?.data || [];
+                const transformed = providers.map((provider: any) => {
+                    const coverage = coverageData.find(
+                        (item: any) => item.provider === provider.provider_name
+                    );
 
-        const transformed = providers.map((provider: any) => {
-            const coverage = coverageData.find(
-                (item: any) => item.provider === provider.provider_name
-            );
+                    return {
+                        name: provider.provider_name,
+                        score: `${provider.score.toFixed(1)}%`,
+                        premium: provider.premium.replace("SAR ", ""),
+                        rate: provider.rate.replace("‰", "").replace("%", ""),
+                        coverage: provider.coverage_limit || "N/A",
+                        benefits: coverage?.benefits || 0,
+                        exclusions: coverage?.exclusions || 0,
+                        warranties: coverage?.warranties || 0,
+                        rank: provider.rank,
+                    };
+                });
 
-            return {
-                name: provider.provider_name,
-                score: `${provider.score.toFixed(1)}%`,
-                premium: provider.premium.replace("SAR ", ""),
-                rate: provider.rate.replace("‰", "").replace("%", ""),
-                coverage: provider.coverage_limit || "N/A",
-                benefits: coverage?.benefits || 0,
-                exclusions: coverage?.exclusions || 0,
-                warranties: coverage?.warranties || 0,
-                rank: provider.rank,
-            };
-        });
+                setTableData(transformed);
+            } catch (err) {
+                console.error("Error loading table data:", err);
+            }
+        };
 
-        setTableData(transformed);
+        loadTableData();
     }, []);
 
     const filteredData = tableData.filter((item) =>

@@ -5,11 +5,16 @@ import Topbar from "@/components/Topbar";
 import Image from "next/image";
 import { FaTrash } from "react-icons/fa";
 import GeneratingModal from "@/components/GeneratingModal";
+import { getUserId } from "@/utils/auth";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function UploadPage() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [showModal, setShowModal] = useState(false);
+    const { refreshUser } = useAuth();
+    const router = useRouter();
     const API_BASE = process.env.NEXT_PUBLIC_FASTAPI_API;
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,12 +37,7 @@ export default function UploadPage() {
         }
 
         const token = localStorage.getItem("accessToken");
-        const storedUser = localStorage.getItem("user");
-
-        let userId = null;
-        if (storedUser) {
-            userId = JSON.parse(storedUser).id;
-        }
+        const userId = getUserId(); // Get user ID from utility function
 
         if (!token || !userId) {
             alert("Authentication error. Please login again.");
@@ -71,11 +71,14 @@ export default function UploadPage() {
             // ✅ Store AI result in Local Storage
             localStorage.setItem("comparisonResult", JSON.stringify(data));
 
+            // ✅ Refresh user context to ensure username is displayed correctly
+            await refreshUser();
+
             // ✅ Close modal after processing
             setShowModal(false);
 
             // ✅ Redirect to dashboard
-            window.location.href = "/dashboard";
+            router.push("/dashboard");
 
         } catch (error) {
             console.error("Upload error:", error);
