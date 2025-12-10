@@ -32,6 +32,7 @@
 
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import { useState } from "react";
+import { getUserId } from "@/utils/auth";
 
 export default function PdfReport() {
     const [loading, setLoading] = useState(false);
@@ -52,12 +53,8 @@ export default function PdfReport() {
             const comparisonId = comparisonData?.comparison_id;
             if (!comparisonId) throw new Error("Comparison ID missing");
 
-            // 3. Get user data
-            const userRaw = localStorage.getItem("user");
-            if (!userRaw) throw new Error("User not found");
-
-            const user = JSON.parse(userRaw);
-            const userId = user?.id;
+            // 3. Get user ID
+            const userId = getUserId();
             if (!userId) throw new Error("User ID missing");
 
             // 4. Call backend PDF endpoint

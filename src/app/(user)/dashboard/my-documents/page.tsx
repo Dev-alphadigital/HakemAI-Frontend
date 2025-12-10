@@ -4,6 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
 import { useEffect, useState } from "react";
 import { MoreVertical } from "lucide-react";
+import { getUserId } from "@/utils/auth";
 
 interface Document {
     id: string;
@@ -24,15 +25,13 @@ export default function MyDocumentsPage() {
         const fetchDocuments = async () => {
             try {
                 const token = localStorage.getItem("accessToken");
-                const storedUser = localStorage.getItem("user");
+                const userId = getUserId();
 
-                if (!token || !storedUser) {
+                if (!token || !userId) {
                     setError("User not authenticated");
                     setLoading(false);
                     return;
                 }
-
-                const userId = JSON.parse(storedUser).id;
 
                 const res = await fetch(`${API_BASE}/api/my-documents`, {
                     headers: {
@@ -65,17 +64,15 @@ export default function MyDocumentsPage() {
     const handleDownload = async (documentId: string, filename: string) => {
         try {
             const token = localStorage.getItem("accessToken");
-            const storedUser = localStorage.getItem("user");
+            const userId = getUserId();
 
-            if (!token || !storedUser) {
+            if (!token || !userId) {
                 alert("User not authenticated");
                 return;
             }
 
-            const userId = JSON.parse(storedUser).id;
-
             const response = await fetch(
-                `https://ai.hakem.ai/api/my-documents/${documentId}/download`,
+                `${API_BASE}/api/my-documents/${documentId}/download`,
                 {
                     method: "GET",
                     headers: {
@@ -110,20 +107,18 @@ export default function MyDocumentsPage() {
     const handleDelete = async (documentId: string) => {
         try {
             const token = localStorage.getItem("accessToken");
-            const storedUser = localStorage.getItem("user");
+            const userId = getUserId();
 
-            if (!token || !storedUser) {
+            if (!token || !userId) {
                 alert("User not authenticated");
                 return;
             }
-
-            const userId = JSON.parse(storedUser).id;
 
             const confirmDelete = confirm("Are you sure you want to delete this document?");
             if (!confirmDelete) return;
 
             const response = await fetch(
-                `https://ai.hakem.ai/api/my-documents/${documentId}`,
+                `${API_BASE}/api/my-documents/${documentId}`,
                 {
                     method: "DELETE",
                     headers: {
