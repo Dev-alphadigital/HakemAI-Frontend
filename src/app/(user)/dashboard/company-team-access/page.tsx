@@ -137,6 +137,23 @@ export default function CompanyTeamAccess() {
         setToken(storedToken);
     }, []);
 
+    useEffect(() => {
+        if (!token) return;
+
+        const ensureCompany = async () => {
+            try {
+                await fetch(`${API_BASE}/api/company/mine`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            } catch (err) {
+                console.log("❌ Ensure company error:", err);
+            }
+        };
+
+        ensureCompany();
+    }, [token]);
 
     /** Fetch team members */
     const fetchTeam = async () => {
@@ -177,8 +194,8 @@ export default function CompanyTeamAccess() {
         try {
             const res = await fetch(`${API_BASE}/api/company/search-users?q=${value}`, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             const data = await res.json();
@@ -187,6 +204,7 @@ export default function CompanyTeamAccess() {
             console.log("❌ Search Error:", error);
         }
     };
+
 
 
     /** Add member */
@@ -301,7 +319,7 @@ export default function CompanyTeamAccess() {
                                 >
                                     <div>
                                         <p className="font-semibold text-gray-800">
-                                            {member.user?.name}
+                                            {member.user?.username}
                                         </p>
                                         <p className="text-sm text-gray-500">
                                             {member.user?.email}
