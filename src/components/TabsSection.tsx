@@ -39,7 +39,7 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
                 const data = await loadComparisonData();
                 console.log('📊 TabsSection: Loaded data:', data ? 'Data found' : 'No data');
                 console.log('📦 TabsSection: Data structure:', data ? Object.keys(data) : 'null');
-                
+
                 if (data) {
                     setComparison(data);
                     setLastUpdateTime(Date.now());
@@ -76,9 +76,9 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
                 <p className="text-sm text-gray-500">
                     If this takes too long, try refreshing the page or clicking the "Refresh Now" button above.
                 </p>
-                <button 
-                    onClick={() => window.location.reload()} 
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-blue-700"
                 >
                     Refresh Page
                 </button>
