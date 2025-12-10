@@ -181,7 +181,6 @@ export default function CompanyTeamAccess() {
         if (token) fetchTeam();
     }, [token]);
 
-
     /** Live Search */
     const handleSearch = async (value: string) => {
         setSearchQuery(value);
@@ -204,8 +203,6 @@ export default function CompanyTeamAccess() {
             console.log("❌ Search Error:", error);
         }
     };
-
-
 
     /** Add member */
     const handleAddMember = async (email: string) => {
@@ -242,7 +239,6 @@ export default function CompanyTeamAccess() {
         }
     };
 
-
     /** Remove Member */
     const removeTeamMember = async (userId: string) => {
         if (!token) return;
@@ -263,7 +259,6 @@ export default function CompanyTeamAccess() {
             setLoading(false);
         }
     };
-
 
     return (
         <main className="min-h-screen flex bg-[#fdfcf8] text-gray-900 lg:bg-[#e8f1ed]">
