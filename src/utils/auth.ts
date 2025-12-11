@@ -33,7 +33,9 @@ export function getUserId(): string | null {
         const userStr = localStorage.getItem('user');
         if (userStr) {
             const user = JSON.parse(userStr);
+            // Check both _id (MongoDB format) and id (backend response format)
             if (user._id) return user._id;
+            if (user.id) return user.id;
         }
 
         // Fallback: decode from JWT token
@@ -48,4 +50,5 @@ export function getUserId(): string | null {
         return null;
     }
 }
+
 

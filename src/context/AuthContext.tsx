@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
+    _id?: string;  // MongoDB user ID (optional - from profile endpoint)
+    id?: string;   // User ID from login response
     username: string;
     email: string;
     phoneNumber: string;

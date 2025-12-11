@@ -1,8 +1,8 @@
 // Utility to sync comparison data from backend to localStorage
 import { getUserId } from './auth';
 
-// Hardcoded for now - will use env variable after server restart
-const AI_API_BASE = 'http://localhost:8000';
+// Use environment variable with fallback to localhost for development
+const AI_API_BASE = process.env.NEXT_PUBLIC_FASTAPI_API || 'http://localhost:8000';
 
 /**
  * Fetch comparisons from backend and sync to localStorage
@@ -17,7 +17,24 @@ export async function syncComparisonsFromBackend(): Promise<any | null> {
         const userId = getUserId();
         if (!userId) {
             console.error('❌ No user ID found, skipping backend sync');
-            console.log('💡 Try: localStorage.getItem("user")');
+            
+            // Debug: Check what's in localStorage
+            const userStr = localStorage.getItem('user');
+            const token = localStorage.getItem('accessToken');
+            console.log('🔍 Debug - localStorage user:', userStr ? 'exists' : 'missing');
+            console.log('🔍 Debug - localStorage token:', token ? 'exists' : 'missing');
+            
+            if (userStr) {
+                try {
+                    const userData = JSON.parse(userStr);
+                    console.log('🔍 Debug - User data keys:', Object.keys(userData));
+                    console.log('🔍 Debug - Has _id?', '_id' in userData);
+                    console.log('🔍 Debug - _id value:', userData._id);
+                } catch (e) {
+                    console.error('🔍 Debug - Failed to parse user:', e);
+                }
+            }
+            
             return null;
         }
 
