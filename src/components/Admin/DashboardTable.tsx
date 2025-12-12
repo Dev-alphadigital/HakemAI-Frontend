@@ -339,12 +339,14 @@ export default function DashboardTable({ users, onRefresh }: DashboardTableProps
                 onClose={() => setFreezeOpen(false)}
                 onConfirm={handleFreeze}
                 userName={selectedUser?.username}
+                mode="freeze"
             />
             <FreezeAccountModal
                 isOpen={unfreezeOpen}
                 onClose={() => setUnfreezeOpen(false)}
                 onConfirm={handleUnfreeze}
                 userName={selectedUser?.username}
+                mode="unfreeze"
             />
         </div>
     );
