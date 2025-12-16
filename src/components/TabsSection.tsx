@@ -185,6 +185,7 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
     const tabs = [
         "Summary",
         "Key Differences",
+        "Benefits",
         "Charts",
         "Data Table",
         "Side-by-Side",
