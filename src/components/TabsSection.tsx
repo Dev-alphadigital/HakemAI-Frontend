@@ -8,6 +8,7 @@ import KeyDifferences from "./KeyDifferences";
 import PdfReport from "./PdfReport";
 import SideBySide from "./SideBySide";
 import { loadComparisonData } from "@/utils/comparisonSync";
+import BenefitsTab from "./BenefitsTab";
 
 export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
     const [activeTab, setActiveTab] = useState("Summary");
@@ -139,6 +140,14 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
             subjectivities: item.unique_subjectivities || [],
         })) || [];
 
+    // ✅ BENEFITS DATA
+    const benefitsData =
+        comparison?.side_by_side?.providers?.map((item: any) => ({
+            name: item.name,
+            benefits: item.benefits || [],
+            active: item.name === comparison.side_by_side.winner,
+        })) || [];
+
     const renderProviderCards = (dataArray: any[]) => (
         <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
             {dataArray.map((provider, index) => (
@@ -164,6 +173,10 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
 
             case "Key Differences":
                 return renderProviderCards(keyDiffData);
+
+            case "Benefits":
+                return <BenefitsTab data={benefitsData} />;
+
 
             case "Side-by-Side":
                 return renderProviderCards(sideBySideData);
