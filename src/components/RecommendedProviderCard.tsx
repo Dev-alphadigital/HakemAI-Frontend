@@ -70,7 +70,7 @@ export default function RecommendedProviderCard() {
                 console.log('🔄 RecommendedProviderCard: Loading...');
                 const result = await loadComparisonData();
                 console.log('📊 RecommendedProviderCard: Got data:', result ? 'yes' : 'no');
-                
+
                 if (result) {
                     console.log('📦 Provider cards:', result.provider_cards?.length || 0);
                     const topProvider = result.provider_cards?.[0];
@@ -98,7 +98,7 @@ export default function RecommendedProviderCard() {
     if (!provider) return null;
 
     return (
-        <div className="relative w-full bg-white rounded-3xl shadow-sm overflow-hidden mt-2">
+        <div className="relative w-full bg-white rounded-bl-3xl rounded-br-3xl shadow-sm overflow-hidden mt-2">
 
             {/* Background image */}
             <div className="relative h-40 md:h-52 lg:h-64 xl:h-72 2xl:h-80 w-full">
