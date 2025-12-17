@@ -365,9 +365,9 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
                     // ✅ FIXED
                     active: normalizeName(p.company) === recommended,
 
-                    Warranties: p.unique_warranties || [],
-                    Exclusions: p.unique_exclusions || [],
-                    Subjectivities: p.unique_subjectivities || [],
+                    warranties: p.unique_warranties || [],
+                    exclusions: p.unique_exclusions || [],
+                    subjectivities: p.unique_subjectivities || [],
                 };
             })
             .sort((a: any, b: any) => (b.active ? 1 : 0) - (a.active ? 1 : 0));
@@ -420,7 +420,8 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
                 return renderProviderCards(summaryData);
 
             case "Key Differences":
-                return renderProviderCards(keyDiffData);
+                return <KeyDifferences data={keyDiffData} />;
+
 
             case "Benefits":
                 return <BenefitsTab data={benefitsData} />;
