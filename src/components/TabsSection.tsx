@@ -117,8 +117,8 @@
 //                     // ✅ FIXED
 //                     active: normalizeName(p.company) === recommended,
 
-//                     strengths: p.key_advantages || [],
 //                     warranties: p.unique_warranties || [],
+//                     exclusions: p.unique_exclusions || [],
 //                     subjectivities: p.unique_subjectivities || [],
 //                 };
 //             })
@@ -172,7 +172,8 @@
 //                 return renderProviderCards(summaryData);
 
 //             case "Key Differences":
-//                 return renderProviderCards(keyDiffData);
+//                 return <KeyDifferences data={keyDiffData} />;
+
 
 //             case "Benefits":
 //                 return <BenefitsTab data={benefitsData} />;
@@ -246,6 +247,7 @@
 
 
 
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -254,7 +256,8 @@ import ChartSection from "@/app/(user)/dashboard/charts/ChartSection";
 import DataTable from "./DataTable";
 import KeyDifferences from "./KeyDifferences";
 import PdfReport from "./PdfReport";
-import SideBySide from "./SideBySide";
+import SideBySideTable from "./SideBySideTable";
+import SideBySideMobile from "./SideBySideMobile";
 import { loadComparisonData } from "@/utils/comparisonSync";
 import BenefitsTab from "./BenefitsTab";
 
@@ -373,21 +376,6 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
             .sort((a: any, b: any) => (b.active ? 1 : 0) - (a.active ? 1 : 0));
 
 
-
-
-    // ✅ SIDE BY SIDE
-    const sideBySideData =
-        comparison?.side_by_side?.providers?.map((item: any) => ({
-            name: item.name,
-            score: `${item.score}%`,
-            premium: `SAR ${item.premium.toLocaleString()}`,
-            rate: item.rate,
-            active: item.name === comparison.side_by_side.winner,
-            strengths: item.strengths || [],
-            warranties: item.unique_warranties || [],
-            subjectivities: item.unique_subjectivities || [],
-        })) || [];
-
     // ✅ BENEFITS DATA
     const benefitsData =
         comparison?.side_by_side?.providers?.map((item: any) => ({
@@ -422,13 +410,16 @@ export default function TabsSection({ showAllTabs }: { showAllTabs: boolean }) {
             case "Key Differences":
                 return <KeyDifferences data={keyDiffData} />;
 
-
             case "Benefits":
                 return <BenefitsTab data={benefitsData} />;
 
-
             case "Side-by-Side":
-                return renderProviderCards(sideBySideData);
+                return (
+                    <>
+                        <SideBySideTable matrix={comparison.side_by_side.comparison_matrix} />
+                        <SideBySideMobile matrix={comparison.side_by_side.comparison_matrix} />
+                    </>
+                );
 
             case "Charts":
                 return <ChartSection />;
