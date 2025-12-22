@@ -91,10 +91,10 @@ export default function ActivityLogsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#e8f1ed]">
+    <div className="min-h-screen bg-[#e8f1ed] m-0 p-0">
       <AdminTopbar />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
         {/* Header */}
         <div className="mb-8">
           <button
@@ -104,9 +104,9 @@ export default function ActivityLogsPage() {
             <FaArrowLeft />
             <span>Back to Dashboard</span>
           </button>
-          <div className="bg-gradient-to-r from-teal-600 to-emerald-600 rounded-2xl p-8 shadow-lg">
+          <div className="bg-gradient-to-r from-[#1eaca8] to-[#14b8a6] rounded-2xl p-8 shadow-lg">
             <h1 className="text-4xl font-bold text-white mb-2">Activity Logs</h1>
-            <p className="text-teal-50 text-lg">Monitor all user activities, logins, and key actions in real-time</p>
+            <p className="text-white/90 text-lg">Monitor all user activities, logins, and key actions in real-time</p>
           </div>
         </div>
 
@@ -161,7 +161,7 @@ export default function ActivityLogsPage() {
             <div className="flex items-end">
               <button
                 onClick={fetchStatistics}
-                className="w-full px-4 py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
+                className="w-full px-4 py-3 bg-gradient-to-r from-[#1eaca8] to-[#14b8a6] hover:from-[#189b97] hover:to-[#0d9488] text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
               >
                 View Statistics
               </button>
@@ -188,7 +188,7 @@ export default function ActivityLogsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Total Activities */}
-                  <div className="bg-gradient-to-br from-teal-50 to-emerald-100 rounded-xl p-6 border-2 border-teal-200 shadow-md">
+                  <div className="bg-gradient-to-br from-teal-50 to-emerald-100 rounded-xl p-6 border-2 border-[#1eaca8]/20 shadow-md">
                     <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
                       <svg className="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
@@ -229,7 +229,7 @@ export default function ActivityLogsPage() {
                       {statistics.topUsers.slice(0, 5).map((user, index) => (
                         <div key={user.userId} className="flex justify-between items-center bg-white rounded-lg px-4 py-3 hover:shadow-md transition-shadow">
                           <span className="text-gray-700 font-medium">
-                            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-bold mr-3">
+                            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-[#1eaca8] to-[#14b8a6] text-white font-bold mr-3">
                               {index + 1}
                             </span>
                             {user.username}
@@ -264,7 +264,7 @@ export default function ActivityLogsPage() {
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gradient-to-r from-teal-500 to-emerald-500">
+              <thead className="bg-gradient-to-r from-[#1eaca8] to-[#14b8a6]">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                     Date & Time

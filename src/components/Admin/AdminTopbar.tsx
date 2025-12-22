@@ -31,7 +31,7 @@ export default function AdminTopbar() {
     };
 
     return (
-        <header className="w-full bg-[#e8f1ed] flex items-center justify-between px-4 md:px-10 py-3 border-b border-gray-200 relative">
+        <header className="w-full bg-gradient-to-r from-[#1eaca8] to-[#14b8a6] flex items-center justify-between px-4 md:px-10 py-3 border-b-2 border-teal-500/30 shadow-lg relative m-0">
             {/* Left: Logo */}
             <div className="flex items-center gap-3 flex-shrink-0 cursor-pointer" onClick={() => router.push("/admin/dashboard")}>
                 <div className="relative w-12 h-12">
@@ -48,7 +48,7 @@ export default function AdminTopbar() {
 
             {/* Center: Title */}
             <div className="absolute left-1/2 -translate-x-1/2">
-                <span className="text-lg md:text-xl font-bold text-gray-900 whitespace-nowrap">
+                <span className="text-lg md:text-xl font-bold text-white whitespace-nowrap drop-shadow-md">
                     Admin Portal
                 </span>
             </div>
@@ -56,19 +56,19 @@ export default function AdminTopbar() {
             {/* Right: Notification + Profile */}
             <div className="flex items-center gap-5 flex-shrink-0" ref={dropdownRef}>
                 <div 
-                    className="flex items-center gap-2 bg-white rounded-full px-3 py-1 shadow-sm hover:shadow-md transition cursor-pointer relative"
+                    className="flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-lg hover:shadow-xl transition-all cursor-pointer relative border border-white/50"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-r from-teal-600 to-yellow-500 flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">
+                    <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-r from-yellow-400 to-yellow-500 flex items-center justify-center shadow-md">
+                        <span className="text-teal-800 font-bold text-sm">
                             {admin?.username?.charAt(0).toUpperCase() || "A"}
                         </span>
                     </div>
                     <div className="hidden sm:flex flex-col leading-tight">
                         <span className="text-sm font-semibold text-gray-900">{admin?.username || "Admin"}</span>
-                        <span className="text-xs text-gray-500">{admin?.role || "Admin"}</span>
+                        <span className="text-xs text-teal-700">{admin?.role || "Admin"}</span>
                     </div>
-                    <FaChevronDown className="text-gray-500 text-xs" />
+                    <FaChevronDown className="text-gray-600 text-xs" />
 
                     {/* Dropdown Menu */}
                     {dropdownOpen && (
