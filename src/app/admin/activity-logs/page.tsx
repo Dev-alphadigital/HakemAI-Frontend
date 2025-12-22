@@ -243,9 +243,6 @@ export default function ActivityLogsPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Description
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    IP Address
-                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -280,9 +277,6 @@ export default function ActivityLogsPage() {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {log.description}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {log.ipAddress || "N/A"}
                       </td>
                     </tr>
                   ))
