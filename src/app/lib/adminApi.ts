@@ -210,3 +210,110 @@ export function getPaymentProofUrl(userId: string): string {
     return `${API_BASE}/api/admin/users/${userId}/payment-proof/download`;
 }
 
+// ============= ACTIVITY LOGS =============
+export interface ActivityLog {
+    _id: string;
+    userId: string;
+    userEmail: string;
+    username: string;
+    activityType: string;
+    description: string;
+    ipAddress?: string;
+    userAgent?: string;
+    createdAt: string;
+    metadata?: Record<string, any>;
+}
+
+export interface ActivityLogsResponse {
+    logs: ActivityLog[];
+    total: number;
+    page: number;
+    totalPages: number;
+}
+
+export interface ActivityStatistics {
+    totalActivities: number;
+    activitiesByType: Record<string, number>;
+    topUsers: Array<{ userId: string; username: string; count: number }>;
+    activitiesByDay: Array<{ date: string; count: number }>;
+}
+
+export async function getActivityLogs(params?: {
+    page?: number;
+    limit?: number;
+    userId?: string;
+    activityType?: string;
+    startDate?: string;
+    endDate?: string;
+    search?: string;
+}): Promise<ActivityLogsResponse> {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append("page", params.page.toString());
+    if (params?.limit) queryParams.append("limit", params.limit.toString());
+    if (params?.userId) queryParams.append("userId", params.userId);
+    if (params?.activityType) queryParams.append("activityType", params.activityType);
+    if (params?.startDate) queryParams.append("startDate", params.startDate);
+    if (params?.endDate) queryParams.append("endDate", params.endDate);
+    if (params?.search) queryParams.append("search", params.search);
+
+    const res = await fetch(
+        `${API_BASE}/api/admin/activity-logs?${queryParams.toString()}`,
+        {
+            method: "GET",
+            headers: getAuthHeaders(),
+        }
+    );
+    return handleResponse<ActivityLogsResponse>(res);
+}
+
+export async function getUserActivityLogs(
+    userId: string,
+    page?: number,
+    limit?: number
+): Promise<ActivityLogsResponse> {
+    const queryParams = new URLSearchParams();
+    if (page) queryParams.append("page", page.toString());
+    if (limit) queryParams.append("limit", limit.toString());
+
+    const res = await fetch(
+        `${API_BASE}/api/admin/users/${userId}/activity-logs?${queryParams.toString()}`,
+        {
+            method: "GET",
+            headers: getAuthHeaders(),
+        }
+    );
+    return handleResponse<ActivityLogsResponse>(res);
+}
+
+export async function getActivityStatistics(params?: {
+    startDate?: string;
+    endDate?: string;
+}): Promise<ActivityStatistics> {
+    const queryParams = new URLSearchParams();
+    if (params?.startDate) queryParams.append("startDate", params.startDate);
+    if (params?.endDate) queryParams.append("endDate", params.endDate);
+
+    const res = await fetch(
+        `${API_BASE}/api/admin/activity-logs/statistics?${queryParams.toString()}`,
+        {
+            method: "GET",
+            headers: getAuthHeaders(),
+        }
+    );
+    return handleResponse<ActivityStatistics>(res);
+}
+
+export async function getRecentActivityLogs(limit?: number): Promise<ActivityLog[]> {
+    const queryParams = new URLSearchParams();
+    if (limit) queryParams.append("limit", limit.toString());
+
+    const res = await fetch(
+        `${API_BASE}/api/admin/activity-logs/recent?${queryParams.toString()}`,
+        {
+            method: "GET",
+            headers: getAuthHeaders(),
+        }
+    );
+    return handleResponse<ActivityLog[]>(res);
+}
+

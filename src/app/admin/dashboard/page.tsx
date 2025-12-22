@@ -7,6 +7,7 @@ import AdminTopbar from "@/components/Admin/AdminTopbar";
 import { getAllUsers, getStatistics, User, Statistics } from "@/app/lib/adminApi";
 import { useRouter } from "next/navigation";
 import { useAdminAuth } from "@/context/AdminAuthContext";
+import { FaHistory } from "react-icons/fa";
 
 export default function AdminDashboard() {
     const router = useRouter();
@@ -117,6 +118,33 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                 )}
+
+                {/* Activity Logs Access */}
+                <div className="mb-8">
+                    <button
+                        onClick={() => router.push("/admin/activity-logs")}
+                        className="w-full bg-gradient-to-br from-teal-500 via-teal-600 to-emerald-600 hover:from-teal-600 hover:via-teal-700 hover:to-emerald-700 text-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] cursor-pointer"
+                    >
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-white/20 backdrop-blur-sm p-4 rounded-lg">
+                                    <FaHistory className="text-3xl" />
+                                </div>
+                                <div className="text-left">
+                                    <h3 className="text-xl font-bold mb-1">Activity Logs</h3>
+                                    <p className="text-teal-50 text-sm">
+                                        Monitor all user activities, logins, and key actions in real-time
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="hidden md:block">
+                                <svg className="w-8 h-8 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </button>
+                </div>
 
                 {error && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4">
