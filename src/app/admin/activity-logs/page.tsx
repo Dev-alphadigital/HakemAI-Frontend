@@ -163,7 +163,7 @@ export default function ActivityLogsPage() {
                 onClick={fetchStatistics}
                 className="w-full px-4 py-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
               >
-                📊 View Statistics
+                View Statistics
               </button>
             </div>
           </div>
