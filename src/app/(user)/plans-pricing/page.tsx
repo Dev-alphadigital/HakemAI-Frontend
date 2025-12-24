@@ -218,7 +218,7 @@ export default function PlansPricingPage() {
 
                         <div className="space-y-1.5 text-[15px] text-gray-800 mb-10">
                             <p><span className="font-semibold">Bank Name:</span> Riyad Bank</p>
-                            <p><span className="font-semibold">Account Title:</span> Almasol for business solutions</p>
+                            <p><span className="font-semibold">Account Title:</span> Almasol for Business Solutions</p>
                             <p><span className="font-semibold">Account Number:</span> 3000401679940</p>
                             <p><span className="font-semibold">IBAN:</span> SA5220000003000401679940</p>
                         </div>

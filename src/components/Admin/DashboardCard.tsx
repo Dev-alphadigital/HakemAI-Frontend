@@ -233,8 +233,8 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
                     {user.subscription?.plan || "No Plan"}
                 </span>
                 <span className={`px-3 py-1 rounded-md text-xs font-medium ${user.accountStatus === 'ACTIVE' ? 'bg-green-100 text-green-700' :
-                        user.accountStatus === 'FROZEN' ? 'bg-red-100 text-red-700' :
-                            'bg-yellow-100 text-yellow-700'
+                    user.accountStatus === 'FROZEN' ? 'bg-red-100 text-red-700' :
+                        'bg-yellow-100 text-yellow-700'
                     }`}>
                     {user.accountStatus}
                 </span>
@@ -325,12 +325,14 @@ export default function DashboardCard({ user, onRefresh }: DashboardCardProps) {
                 onClose={() => setFreezeOpen(false)}
                 onConfirm={handleFreeze}
                 userName={user.username}
+                mode="freeze"
             />
             <FreezeAccountModal
                 isOpen={unfreezeOpen}
                 onClose={() => setUnfreezeOpen(false)}
                 onConfirm={handleUnfreeze}
                 userName={user.username}
+                mode="unfreeze"
             />
         </div>
     );

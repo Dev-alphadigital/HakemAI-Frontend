@@ -4,7 +4,6 @@
 @import "swiper/css";
 @import "swiper/css/pagination";
 
-
 .swiper-pagination-bullet {
     background-color: #04786b !important;
     opacity: 0.3 !important;

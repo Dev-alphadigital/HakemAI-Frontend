@@ -7,6 +7,7 @@ import AdminTopbar from "@/components/Admin/AdminTopbar";
 import { getAllUsers, getStatistics, User, Statistics } from "@/app/lib/adminApi";
 import { useRouter } from "next/navigation";
 import { useAdminAuth } from "@/context/AdminAuthContext";
+import { FaHistory } from "react-icons/fa";
 
 export default function AdminDashboard() {
     const router = useRouter();
@@ -73,9 +74,9 @@ export default function AdminDashboard() {
 
     if (loading) {
         return (
-            <div>
+            <div className="min-h-screen bg-[#e8f1ed] m-0 p-0">
                 <AdminTopbar />
-                <main className="min-h-screen px-4 md:px-10 text-gray-900">
+                <main className="px-4 md:px-10 text-gray-900 pt-4">
                     <div className="flex items-center justify-center h-96">
                         <div className="text-center">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
@@ -88,10 +89,10 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div>
+        <div className="min-h-screen bg-[#e8f1ed] m-0 p-0">
             <AdminTopbar />
-            <main className="min-h-screen px-4 md:px-10 text-gray-900">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-8 mb-4">
+            <main className="px-4 md:px-10 text-gray-900 pt-4">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                     <div>
                         <h2 className="text-2xl font-bold">Admin Dashboard</h2>
                         <p className="text-gray-500 mb-2">
@@ -127,6 +128,33 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                 )}
+
+                {/* Activity Logs Access */}
+                <div className="mb-8">
+                    <button
+                        onClick={() => router.push("/admin/activity-logs")}
+                        className="w-full bg-gradient-to-br from-[#1eaca8] to-[#14b8a6] hover:from-[#189b97] hover:to-[#0d9488] text-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] cursor-pointer"
+                    >
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-white/20 backdrop-blur-sm p-4 rounded-lg">
+                                    <FaHistory className="text-3xl" />
+                                </div>
+                                <div className="text-left">
+                                    <h3 className="text-xl font-bold mb-1">Activity Logs</h3>
+                                    <p className="text-white/90 text-sm">
+                                        Monitor all user activities, logins, and key actions in real-time
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="hidden md:block">
+                                <svg className="w-8 h-8 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </button>
+                </div>
 
                 {error && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4">
