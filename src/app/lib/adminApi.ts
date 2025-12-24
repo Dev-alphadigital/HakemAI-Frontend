@@ -210,3 +210,95 @@ export function getPaymentProofUrl(userId: string): string {
     return `${API_BASE}/api/admin/users/${userId}/payment-proof/download`;
 }
 
+// ============= HAKIM SCORES =============
+export interface HakimScore {
+    id: string;
+    company_name: string;
+    score: number; // 0.0 to 1.0
+    score_display: number; // 0 to 100 (for display)
+    tier?: string;
+    rank?: number;
+    aliases?: string[];
+    is_zero?: boolean;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface BulkScoreUpdateItem {
+    company_name: string;
+    score: number; // 0.0 to 1.0
+}
+
+export interface BulkScoreUpdateRequest {
+    updates: BulkScoreUpdateItem[];
+}
+
+export interface HakimScoresResponse {
+    success: boolean;
+    count: number;
+    total_companies: number;
+    companies: HakimScore[];
+    sort_by?: string;
+    sort_order?: string;
+}
+
+export interface BulkScoreUpdateResponse {
+    success: boolean;
+    message: string;
+    summary: {
+        updated: number;
+        failed: number;
+        total: number;
+    };
+    results: Array<{
+        company_name: string;
+        status: string;
+        success: boolean;
+        error?: string;
+    }>;
+}
+
+/**
+ * Get all Hakim scores (companies and their scores)
+ * Note: Hakim scores API is on FastAPI, not NestJS backend
+ */
+export async function getAllHakimScores(
+    sortBy: string = "company_name",
+    sortOrder: string = "asc",
+    includeZero: boolean = true
+): Promise<HakimScoresResponse> {
+    const FASTAPI_BASE = process.env.NEXT_PUBLIC_FASTAPI_API || "http://localhost:8000";
+    const params = new URLSearchParams({
+        sort_by: sortBy,
+        sort_order: sortOrder,
+        include_zero: includeZero.toString(),
+    });
+    
+    const res = await fetch(`${FASTAPI_BASE}/api/admin/hakim-scores?${params.toString()}`, {
+        headers: {
+            "Content-Type": "application/json",
+            // Note: FastAPI endpoints may not require auth, but if they do, add token here
+        },
+    });
+    return handleResponse<HakimScoresResponse>(res);
+}
+
+/**
+ * Bulk update Hakim scores (optimized for scoring page)
+ * Note: Hakim scores API is on FastAPI, not NestJS backend
+ */
+export async function bulkUpdateHakimScores(
+    updates: BulkScoreUpdateItem[]
+): Promise<BulkScoreUpdateResponse> {
+    const FASTAPI_BASE = process.env.NEXT_PUBLIC_FASTAPI_API || "http://localhost:8000";
+    const res = await fetch(`${FASTAPI_BASE}/api/admin/hakim-scores/bulk-update`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            // Note: FastAPI endpoints may not require auth, but if they do, add token here
+        },
+        body: JSON.stringify({ updates }),
+    });
+    return handleResponse<BulkScoreUpdateResponse>(res);
+}
+

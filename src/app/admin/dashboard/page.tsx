@@ -91,10 +91,20 @@ export default function AdminDashboard() {
         <div>
             <AdminTopbar />
             <main className="min-h-screen px-4 md:px-10 text-gray-900">
-                <h2 className="text-2xl font-bold mt-8">Admin Dashboard</h2>
-                <p className="text-gray-500 mb-2">
-                    Track user activity and payment records in one place.
-                </p>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-8 mb-4">
+                    <div>
+                        <h2 className="text-2xl font-bold">Admin Dashboard</h2>
+                        <p className="text-gray-500 mb-2">
+                            Track user activity and payment records in one place.
+                        </p>
+                    </div>
+                    <button
+                        onClick={() => router.push("/admin/scoring")}
+                        className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-md transition-colors shadow-sm"
+                    >
+                        Manage Scoring
+                    </button>
+                </div>
 
                 {/* Statistics */}
                 {statistics && (

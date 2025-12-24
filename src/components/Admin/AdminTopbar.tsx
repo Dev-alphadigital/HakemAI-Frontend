@@ -5,11 +5,12 @@ import { useState, useRef, useEffect } from "react";
 import { FaBell, FaSignOutAlt } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
 import { useAdminAuth } from "@/context/AdminAuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function AdminTopbar() {
     const { admin, logout } = useAdminAuth();
     const router = useRouter();
+    const pathname = usePathname();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +50,7 @@ export default function AdminTopbar() {
             {/* Center: Title */}
             <div className="absolute left-1/2 -translate-x-1/2">
                 <span className="text-lg md:text-xl font-bold text-gray-900 whitespace-nowrap">
-                    Admin Portal
+                    {pathname?.includes("/admin/scoring") ? "Scoring" : "Admin Portal"}
                 </span>
             </div>
 
@@ -77,6 +78,22 @@ export default function AdminTopbar() {
                                 <p className="text-sm font-semibold text-gray-900">{admin?.username}</p>
                                 <p className="text-xs text-gray-500">{admin?.email}</p>
                             </div>
+                            {!pathname?.includes("/admin/dashboard") && (
+                                <button
+                                    onClick={() => router.push("/admin/dashboard")}
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                                >
+                                    <span>Dashboard</span>
+                                </button>
+                            )}
+                            {!pathname?.includes("/admin/scoring") && (
+                                <button
+                                    onClick={() => router.push("/admin/scoring")}
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                                >
+                                    <span>Scoring</span>
+                                </button>
+                            )}
                             <button
                                 onClick={handleLogout}
                                 className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
