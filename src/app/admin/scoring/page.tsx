@@ -4,8 +4,8 @@ import AdminTopbar from "@/components/Admin/AdminTopbar";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAdminAuth } from "@/context/AdminAuthContext";
-import { getAllHakimScores, bulkUpdateHakimScores, HakimScore, BulkScoreUpdateItem } from "@/app/lib/adminApi";
-import { FaFilter, FaSearch, FaSave } from "react-icons/fa";
+import { getAllHakimScores, bulkUpdateHakimScores, initializeHakimScores, HakimScore, BulkScoreUpdateItem } from "@/app/lib/adminApi";
+import { FaFilter, FaSearch, FaSave, FaDatabase } from "react-icons/fa";
 
 interface CompanyScore {
     company_name: string;
@@ -22,6 +22,7 @@ export default function ScoringPage() {
     const [filteredCompanies, setFilteredCompanies] = useState<CompanyScore[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [initializing, setInitializing] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
@@ -98,6 +99,34 @@ export default function ScoringPage() {
             
             return updated;
         });
+    };
+
+    const handleInitialize = async () => {
+        if (!confirm("Initialize database with default Hakim scores? This will populate the database with all insurance companies and their default scores.")) {
+            return;
+        }
+
+        try {
+            setInitializing(true);
+            setError("");
+            setSuccess("");
+
+            const response = await initializeHakimScores();
+
+            if (response.success) {
+                setSuccess(`Successfully initialized! Created: ${response.created}, Updated: ${response.updated}`);
+                // Refresh companies to show the initialized data
+                await fetchCompanies();
+                setTimeout(() => setSuccess(""), 5000);
+            } else {
+                setError("Failed to initialize scores");
+            }
+        } catch (err: any) {
+            console.error("❌ Error initializing scores:", err);
+            setError(err?.message || err?.error || "Failed to initialize scores");
+        } finally {
+            setInitializing(false);
+        }
     };
 
     const handleSave = async () => {
@@ -188,14 +217,34 @@ export default function ScoringPage() {
                     </div>
                 )}
 
+                {/* Empty State - Show Initialize Button */}
+                {companies.length === 0 && !loading && (
+                    <div className="bg-white rounded-lg shadow-md p-12 text-center">
+                        <FaDatabase className="text-6xl text-gray-300 mx-auto mb-4" />
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">No Companies Found</h3>
+                        <p className="text-gray-600 mb-6">
+                            The Hakim Score database is empty. Initialize it with default scores to get started.
+                        </p>
+                        <button
+                            onClick={handleInitialize}
+                            disabled={initializing}
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg font-semibold hover:from-teal-600 hover:to-teal-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <FaDatabase />
+                            {initializing ? "Initializing..." : "Initialize Database"}
+                        </button>
+                    </div>
+                )}
+
                 {/* Company List Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">
-                        All Companies {companies.length}
-                    </h2>
-                    <div className="flex items-center gap-3 w-full sm:w-auto">
-                        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition text-gray-700">
-                            <FaFilter className="text-sm" />
+                {companies.length > 0 && (
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                        <h2 className="text-xl font-bold text-gray-900">
+                            All Companies ({companies.length})
+                        </h2>
+                        <div className="flex items-center gap-3 w-full sm:w-auto">
+                            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition text-gray-700">
+                                <FaFilter className="text-sm" />
                             <span>Filters</span>
                         </button>
                         <div className="relative flex-1 sm:flex-initial">
@@ -273,20 +322,22 @@ export default function ScoringPage() {
                 </div>
 
                 {/* Save Button */}
-                <div className="mt-6 flex justify-end">
-                    <button
-                        onClick={handleSave}
-                        disabled={!hasChanges || saving}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-md font-semibold text-white transition ${
-                            hasChanges && !saving
-                                ? "bg-teal-600 hover:bg-teal-700 cursor-pointer"
-                                : "bg-gray-400 cursor-not-allowed"
-                        }`}
-                    >
-                        <FaSave className="text-sm" />
-                        <span>{saving ? "Saving..." : "Save"}</span>
-                    </button>
-                </div>
+                {companies.length > 0 && (
+                    <div className="mt-6 flex justify-end">
+                        <button
+                            onClick={handleSave}
+                            disabled={!hasChanges || saving}
+                            className={`flex items-center gap-2 px-6 py-3 rounded-md font-semibold text-white transition ${
+                                hasChanges && !saving
+                                    ? "bg-teal-600 hover:bg-teal-700 cursor-pointer"
+                                    : "bg-gray-400 cursor-not-allowed"
+                            }`}
+                        >
+                            <FaSave className="text-sm" />
+                            <span>{saving ? "Saving..." : "Save"}</span>
+                        </button>
+                    </div>
+                )}
             </main>
         </div>
     );

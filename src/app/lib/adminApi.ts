@@ -302,6 +302,29 @@ export async function bulkUpdateHakimScores(
     return handleResponse<BulkScoreUpdateResponse>(res);
 }
 
+/**
+ * Initialize Hakim scores from default data (HAKIM_SCORE dictionary)
+ * This should be called once when setting up a new database
+ * Note: Hakim scores API is on FastAPI, not NestJS backend
+ */
+export async function initializeHakimScores(): Promise<{
+    success: boolean;
+    message: string;
+    created: number;
+    updated: number;
+    failed: number;
+    total: number;
+}> {
+    const FASTAPI_BASE = process.env.NEXT_PUBLIC_FASTAPI_API || "http://localhost:8000";
+    const res = await fetch(`${FASTAPI_BASE}/api/admin/hakim-scores/initialize`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return handleResponse(res);
+}
+
 // ============= ACTIVITY LOGS =============
 export interface ActivityLog {
     _id: string;
