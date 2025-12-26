@@ -339,6 +339,7 @@ export async function getActivityLogs(params?: {
     endDate?: string;
     search?: string;
 }): Promise<ActivityLogsResponse> {
+    const FASTAPI_BASE = process.env.NEXT_PUBLIC_FASTAPI_API || "http://localhost:8000";
     const queryParams = new URLSearchParams();
     if (params?.page) queryParams.append("page", params.page.toString());
     if (params?.limit) queryParams.append("limit", params.limit.toString());
@@ -349,7 +350,7 @@ export async function getActivityLogs(params?: {
     if (params?.search) queryParams.append("search", params.search);
 
     const res = await fetch(
-        `${API_BASE}/api/admin/activity-logs?${queryParams.toString()}`,
+        `${FASTAPI_BASE}/api/admin/activity-logs?${queryParams.toString()}`,
         {
             method: "GET",
             headers: getAuthHeaders(),
@@ -363,12 +364,13 @@ export async function getUserActivityLogs(
     page?: number,
     limit?: number
 ): Promise<ActivityLogsResponse> {
+    const FASTAPI_BASE = process.env.NEXT_PUBLIC_FASTAPI_API || "http://localhost:8000";
     const queryParams = new URLSearchParams();
     if (page) queryParams.append("page", page.toString());
     if (limit) queryParams.append("limit", limit.toString());
 
     const res = await fetch(
-        `${API_BASE}/api/admin/users/${userId}/activity-logs?${queryParams.toString()}`,
+        `${FASTAPI_BASE}/api/admin/users/${userId}/activity-logs?${queryParams.toString()}`,
         {
             method: "GET",
             headers: getAuthHeaders(),
@@ -381,12 +383,13 @@ export async function getActivityStatistics(params?: {
     startDate?: string;
     endDate?: string;
 }): Promise<ActivityStatistics> {
+    const FASTAPI_BASE = process.env.NEXT_PUBLIC_FASTAPI_API || "http://localhost:8000";
     const queryParams = new URLSearchParams();
     if (params?.startDate) queryParams.append("startDate", params.startDate);
     if (params?.endDate) queryParams.append("endDate", params.endDate);
 
     const res = await fetch(
-        `${API_BASE}/api/admin/activity-logs/statistics?${queryParams.toString()}`,
+        `${FASTAPI_BASE}/api/admin/activity-logs/statistics?${queryParams.toString()}`,
         {
             method: "GET",
             headers: getAuthHeaders(),
@@ -396,11 +399,12 @@ export async function getActivityStatistics(params?: {
 }
 
 export async function getRecentActivityLogs(limit?: number): Promise<ActivityLog[]> {
+    const FASTAPI_BASE = process.env.NEXT_PUBLIC_FASTAPI_API || "http://localhost:8000";
     const queryParams = new URLSearchParams();
     if (limit) queryParams.append("limit", limit.toString());
 
     const res = await fetch(
-        `${API_BASE}/api/admin/activity-logs/recent?${queryParams.toString()}`,
+        `${FASTAPI_BASE}/api/admin/activity-logs/recent?${queryParams.toString()}`,
         {
             method: "GET",
             headers: getAuthHeaders(),

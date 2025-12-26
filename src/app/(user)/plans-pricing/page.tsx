@@ -36,7 +36,8 @@ export default function PlansPricingPage() {
             const formData = new FormData();
             formData.append("file", paymentFile);
 
-            const response = await fetch("http://localhost:5000/api/payment-proof/upload", {
+            const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+            const response = await fetch(`${API_BASE}/api/payment-proof/upload`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,

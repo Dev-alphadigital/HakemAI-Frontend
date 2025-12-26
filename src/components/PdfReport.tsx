@@ -57,9 +57,9 @@ export default function PdfReport() {
             const userId = getUserId();
             if (!userId) throw new Error("User ID missing");
 
-            // 4. Call backend PDF endpoint
+            // 4. Call backend PDF endpoint to get both PDFs
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_FASTAPI_API}/api/comparison/${comparisonId}/pdf`,
+                `${process.env.NEXT_PUBLIC_FASTAPI_API}/api/comparison/${comparisonId}/pdf?report_type=both`,
                 {
                     method: "GET",
                     headers: {
@@ -69,23 +69,62 @@ export default function PdfReport() {
             );
 
             if (!response.ok) {
-                throw new Error("Failed to download PDF");
+                const errorText = await response.text();
+                throw new Error(`Failed to download PDFs: ${errorText}`);
             }
 
-            // 5. Convert to blob
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
+            // 5. Check if response is JSON (both PDFs) or blob (single PDF)
+            const contentType = response.headers.get("content-type");
+            
+            if (contentType && contentType.includes("application/json")) {
+                // Both PDFs returned as JSON with base64 data
+                const data = await response.json();
+                
+                if (data.success && data.reports) {
+                    // Helper function to decode base64 and trigger download
+                    const downloadBase64PDF = (base64Data: string, filename: string) => {
+                        // Convert base64 to binary
+                        const binaryString = atob(base64Data);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        const blob = new Blob([bytes], { type: 'application/pdf' });
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement("a");
+                        link.href = url;
+                        link.download = filename;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+                    };
 
-            // 6. Trigger browser download
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = `HAKEM_Comparison_${comparisonId}.pdf`;
+                    // Download strategic memo
+                    const strategicData = data.reports.strategic_memo;
+                    downloadBase64PDF(strategicData.data, strategicData.filename);
 
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
+                    // Wait a bit before downloading the second PDF
+                    await new Promise(resolve => setTimeout(resolve, 300));
 
-            window.URL.revokeObjectURL(url);
+                    // Download detailed comparison
+                    const detailedData = data.reports.detailed_comparison;
+                    downloadBase64PDF(detailedData.data, detailedData.filename);
+                } else {
+                    throw new Error("Invalid response format from server");
+                }
+            } else {
+                // Single PDF blob response (fallback)
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `HAKEM_Comparison_${comparisonId}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                window.URL.revokeObjectURL(url);
+            }
         } catch (err: any) {
             console.error(err);
             setError(err.message || "Something went wrong");

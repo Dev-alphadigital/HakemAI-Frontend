@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { logActivity } from "@/app/lib/api";
 
 export default function SignupPage() {
     const router = useRouter();
@@ -58,6 +59,16 @@ export default function SignupPage() {
             document.cookie = `accessToken=${data.accessToken}; path=/; max-age=604800`;
 
             await refreshUser();
+
+            // Log the login activity
+            logActivity({
+                userId: data.user.id || data.user._id,
+                activityType: "login",
+                description: `User logged in successfully`,
+                userEmail: data.user.email,
+                username: data.user.username,
+                userAgent: navigator.userAgent
+            }).catch(err => console.error("Failed to log login activity:", err));
 
             // Sub-users (team members) always go to dashboard
             if (data.user.isSubUser === true) {

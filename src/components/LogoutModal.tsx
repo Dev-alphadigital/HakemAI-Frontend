@@ -70,6 +70,7 @@
 import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import { useState } from "react";
+import { logActivity } from "@/app/lib/api";
 
 interface LogoutModalProps {
     isOpen: boolean;
@@ -89,16 +90,31 @@ export default function LogoutModal({ isOpen, onClose }: LogoutModalProps) {
             const storedUser = localStorage.getItem("user");
 
             let refreshToken = null;
+            let userData = null;
             if (storedUser) {
                 const parsed = JSON.parse(storedUser);
                 refreshToken = parsed.refreshToken;
+                userData = parsed;
             }
 
             if (!token) {
                 throw new Error("No token found");
             }
 
-            const response = await fetch("http://localhost:5000/api/auth/logout", {
+            // Log the logout activity BEFORE clearing storage
+            if (userData) {
+                logActivity({
+                    userId: userData.id || userData._id,
+                    activityType: "logout",
+                    description: `User logged out`,
+                    userEmail: userData.email,
+                    username: userData.username,
+                    userAgent: navigator.userAgent
+                }).catch(err => console.error("Failed to log logout activity:", err));
+            }
+
+            const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+            const response = await fetch(`${API_BASE}/api/auth/logout`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
