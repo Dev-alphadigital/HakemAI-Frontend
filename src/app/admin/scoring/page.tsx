@@ -236,32 +236,33 @@ export default function ScoringPage() {
                     </div>
                 )}
 
-                {/* Company List Header */}
+                {/* Company List Header and Table */}
                 {companies.length > 0 && (
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                        <h2 className="text-xl font-bold text-gray-900">
-                            All Companies ({companies.length})
-                        </h2>
-                        <div className="flex items-center gap-3 w-full sm:w-auto">
-                            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition text-gray-700">
-                                <FaFilter className="text-sm" />
-                            <span>Filters</span>
-                        </button>
-                        <div className="relative flex-1 sm:flex-initial">
-                            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                            <input
-                                type="text"
-                                placeholder="Search"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                            />
+                    <div>
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                            <h2 className="text-xl font-bold text-gray-900">
+                                All Companies ({companies.length})
+                            </h2>
+                            <div className="flex items-center gap-3 w-full sm:w-auto">
+                                <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition text-gray-700">
+                                    <FaFilter className="text-sm" />
+                                    <span>Filters</span>
+                                </button>
+                                <div className="relative flex-1 sm:flex-initial">
+                                    <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                {/* Company Scores Table */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        {/* Company Scores Table */}
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-gray-50 border-b border-gray-200">
@@ -320,6 +321,8 @@ export default function ScoringPage() {
                         </table>
                     </div>
                 </div>
+                    </div>
+                )}
 
                 {/* Save Button */}
                 {companies.length > 0 && (
