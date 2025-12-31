@@ -33,6 +33,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const refreshUser = async () => {
         try {
+            // Skip user profile fetch if we're on admin routes (admin uses separate auth)
+            if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+                // Clear any user data from localStorage/cookies on admin routes
+                setUser(null);
+                localStorage.removeItem("user");
+                localStorage.removeItem("accessToken");
+                document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                setLoading(false);
+                return;
+            }
+
             const token = localStorage.getItem("accessToken");
             if (!token) {
                 setUser(null);

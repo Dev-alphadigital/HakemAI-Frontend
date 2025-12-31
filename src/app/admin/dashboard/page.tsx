@@ -47,13 +47,6 @@ export default function AdminDashboard() {
             // Ensure users is always an array
             const usersArray = Array.isArray(usersData) ? usersData : [];
             
-            // Debug: Log first user structure
-            if (usersArray.length > 0) {
-                console.log('✅ User structure:', usersArray[0]);
-                console.log('User subscription:', usersArray[0].subscription);
-                console.log('User accountStatus:', usersArray[0].accountStatus);
-            }
-            
             setUsers(usersArray);
             setStatistics(statsData);
         } catch (err: any) {
