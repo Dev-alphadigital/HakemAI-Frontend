@@ -8,9 +8,19 @@ export function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
     // ✅ Public routes (no auth required)
-    const publicRoutes = ["/login", "/signup", "/"];
+    const publicRoutes = [
+        "/login", 
+        "/signup", 
+        "/", 
+        "/privacy-policy",
+        "/terms-conditions",
+        "/forgot-password",
+        "/reset-password",
+        "/verify"
+    ];
 
-    if (publicRoutes.includes(pathname)) {
+    // Check if pathname matches any public route or starts with verify
+    if (publicRoutes.includes(pathname) || pathname.startsWith("/verify")) {
         return NextResponse.next();
     }
 

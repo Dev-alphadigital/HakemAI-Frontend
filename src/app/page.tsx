@@ -216,18 +216,18 @@ export default function Home() {
 
           {/* RIGHT SIDE */}
           <div className="flex flex-col mt-14 text-sm gap-3 text-gray-100 lg:text-right">
-            <a
-              href="#"
+            <Link
+              href="/privacy-policy"
               className="hover:text-[#fdc431] transition underline-offset-2 hover:underline"
             >
               Privacy Policy
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="/terms-conditions"
               className="hover:text-[#fdc431] transition underline-offset-2 hover:underline"
             >
               Terms & Conditions
-            </a>
+            </Link>
             <p className="text-xs mt-4 text-gray-300">
               Copyright©2025@hakem.ai. All rights reserved.
             </p>
